@@ -1,3 +1,21 @@
 import { Routes } from '@angular/router';
-
-export const routes: Routes = [];
+import { HeroSectionComponent } from './hero-section/hero-section';
+import { NavbarComponent } from './nav-bar/nav-bar';
+import { AboutSectionComponent } from './about-section/about-section';
+export const routes: Routes = [
+  {
+    path: 'hero-section',
+    component: HeroSectionComponent,
+    title: 'Hero Section',
+  },
+  {
+    path: 'nav-bar',
+    component: NavbarComponent,
+    title: 'Navigation Bar',
+  },
+  {
+    path: 'about-section',
+    component: AboutSectionComponent,
+    title: 'about section'
+  }
+];
