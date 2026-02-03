@@ -442,12 +442,12 @@ export class AboutSectionComponent implements OnInit {
   ];
 
   skills = [
-    { name: 'Angular', percentage: 95 },
-    { name: 'TypeScript', percentage: 92 },
+    { name: 'JavaScript', percentage: 95 },
+    { name: 'Golang', percentage: 85 },
+    { name: 'angular', percentage: 92 },
     { name: 'Tailwind CSS', percentage: 90 },
-    { name: 'Node.js', percentage: 85 },
+    { name: 'Typescript', percentage: 62 },
     { name: 'UI/UX Design', percentage: 88 },
-    { name: 'System Architecture', percentage: 82 },
   ];
 
   experience = [
