@@ -36,6 +36,7 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
               <div *ngIf="!item.dropdown" class="relative">
                 <a
                   [routerLink]="item.route"
+                  [fragment]="item.fragment"
                   routerLinkActive="text-blue-400 bg-blue-900/30"
                   [routerLinkActiveOptions]="{ exact: true }"
                   class="px-4 py-2 rounded-lg text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-all duration-300 flex items-center space-x-1 group"
@@ -114,11 +115,14 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
             </ng-container>
 
             <!-- CTA Button -->
-            <button
-              (mouseenter)="buttonHover = true"
-              (mouseleave)="buttonHover = false"
-              class="ml-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 flex items-center space-x-2"
-            >
+            <a
+  [routerLink]="['/']"
+  fragment="contact"
+  (mouseenter)="buttonHover = true"
+  (mouseleave)="buttonHover = false"
+  class="ml-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 flex items-center space-x-2"
+>
+
               <span>Contact</span>
               <svg
                 [@arrowAnimation]="buttonHover"
@@ -134,7 +138,7 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
                   d="M14 5l7 7m0 0l-7 7m7-7H3"
                 ></path>
               </svg>
-            </button>
+</a>
           </div>
 
           <!-- Mobile Menu Button -->
@@ -172,6 +176,7 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
               <div *ngIf="!item.dropdown" class="border-b border-blue-800/10 last:border-b-0">
                 <a
                   [routerLink]="item.route"
+                  [fragment]="item.fragment"
                   (click)="closeMobileMenu()"
                   routerLinkActive="text-blue-400 bg-blue-900/30"
                   [routerLinkActiveOptions]="{ exact: true }"
@@ -243,10 +248,13 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
 
             <!-- Mobile CTA Button -->
             <div class="px-4 py-3 border-t border-blue-800/10">
-              <button
-                (click)="closeMobileMenu()"
-                class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/30 flex items-center justify-center space-x-2"
-              >
+              <a
+  [routerLink]="['/']"
+  fragment="contact"
+  (click)="closeMobileMenu()"
+  class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold flex items-center justify-center space-x-2"
+>
+
                 <span>Get In Touch</span>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -256,7 +264,7 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
                     d="M14 5l7 7m0 0l-7 7m7-7H3"
                   ></path>
                 </svg>
-              </button>
+</a>
             </div>
           </div>
         </div>
@@ -346,16 +354,20 @@ export class NavbarComponent implements OnInit {
       label: 'Home',
       route: '/',
       icon: true,
+      fragment: 'home',
+
     },
     {
       id: 'projects',
       label: 'Projects',
-      route: '/projects',
+      route: '/',
       icon: true,
+      fragment: 'projects',
     },
     {
       id: 'services',
       label: 'Services',
+      fragment: 'services',
       dropdown: [
         { label: 'Web Development', href: '#web-dev' },
         { label: 'UI/UX Design', href: '#ui-ux' },
@@ -366,6 +378,8 @@ export class NavbarComponent implements OnInit {
     {
       id: 'portfolio',
       label: 'Portfolio',
+      fragment: 'portfolio',
+      
       dropdown: [
         { label: 'Recent Work', href: '#recent' },
         { label: 'Case Studies', href: '#case-studies' },
@@ -376,14 +390,16 @@ export class NavbarComponent implements OnInit {
     {
       id: 'blog',
       label: 'Blog',
-      route: '/blog',
+      route: '/',
       icon: true,
+      fragment: 'blog',
     },
     {
       id: 'about',
       label: 'About',
-      route: '/about',
+      route: '/',
       icon: true,
+      fragment: 'about',
     },
   ];
 
