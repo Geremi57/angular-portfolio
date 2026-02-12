@@ -66,12 +66,14 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
               experience.
             </p>
 
+            <!-- Technology Icons with Labels -->
             <div class="flex flex-wrap gap-4 mb-10">
               <div
                 *ngFor="let tech of technologies"
-                class="px-4 py-2 bg-blue-900/30 backdrop-blur-sm rounded-lg border border-blue-500/20"
+                class="flex items-center space-x-2 px-4 py-2 bg-blue-900/30 backdrop-blur-sm rounded-lg border border-blue-500/20 hover:border-blue-400/50 hover:bg-blue-800/30 transition-all duration-300 group"
               >
-                <span class="text-blue-300 font-medium">{{ tech }}</span>
+                <i [class]="tech.icon" class="text-blue-300 group-hover:text-blue-200 transition-colors duration-300"></i>
+                <span class="text-blue-300 font-medium group-hover:text-blue-200 transition-colors duration-300">{{ tech.name }}</span>
               </div>
             </div>
 
@@ -114,17 +116,18 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
                 <div
                   class="relative w-48 h-48 mx-auto mb-6 overflow-hidden rounded-full border-4 border-blue-500/30"
                 >
-                  <!-- Placeholder for profile image - replace with actual image -->
-                  <div
-                    class="w-full h-full bg-gradient-to-br from-blue-800 to-cyan-700 flex items-center justify-center"
-                  >
-                    <svg class="w-32 h-32 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+                <!-- Placeholder for profile image - replace with actual image -->
+                <div
+                class="w-full h-full bg-gradient-to-br from-blue-800 to-cyan-700 flex items-center justify-center"
+                > 
+                <img src="profile(2).jpeg" alt="Profile image" class="w-full h-full object-cover">
+                    <!-- <svg class="w-32 h-32 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fill-rule="evenodd"
                         d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                         clip-rule="evenodd"
                       ></path>
-                    </svg>
+                    </svg> -->
                   </div>
                 </div>
 
@@ -227,11 +230,19 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
     ]),
   ],
 })
+
 export class HeroSectionComponent implements OnInit, OnDestroy {
   particles: Array<{ x: number; y: number; delay: number }> = [];
   hoverState: string | null = null;
 
-  technologies = ['Angular', 'TypeScript', 'Tailwind CSS', 'Node.js', 'UI/UX'];
+  technologies = [
+    { name: 'Angular', icon: 'fab fa-angular' },
+    { name: 'JavaScript', icon: 'fab fa-js' },
+    { name: 'Tailwind CSS', icon: 'fab fa-css3-alt' },
+    { name: 'Node.js', icon: 'fab fa-node-js' },
+    { name: 'UI/UX', icon: 'fas fa-paint-brush' },
+    { name: 'Golang', icon: 'fa-brands fa-golang' }
+  ];
 
   stats = [
     { value: '50+', label: 'Projects' },
