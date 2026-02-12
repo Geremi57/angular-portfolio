@@ -93,17 +93,7 @@ import {
                       <div
                         class="w-full h-full rounded-full bg-gradient-to-br from-blue-800 to-cyan-700 flex items-center justify-center"
                       >
-                        <svg
-                          class="w-20 h-20 text-blue-300"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
+                       <img src="profile(2).jpeg" class="h-full w-full object-cover"/>
                       </div>
                     </div>
                     <!-- Status indicator -->
@@ -452,24 +442,24 @@ export class AboutSectionComponent implements OnInit {
 
   experience = [
     {
-      year: '2022 - Present',
-      position: 'Lead Frontend Developer',
-      company: 'TechVision Inc.',
+      year: '2026 - Present',
+      position: 'Apprentice',
+      company: 'Zone01 Kisumu.',
       description:
         'Leading a team of 5 developers in building enterprise-level Angular applications.',
     },
     {
-      year: '2020 - 2022',
-      position: 'Senior Full-Stack Developer',
-      company: 'Digital Solutions LLC',
-      description: 'Developed and maintained multiple web applications using Angular and Node.js.',
+      year: '2023 - 2025',
+      position: 'Freelance Full stack developer',
+      company: 'Self-employed',
+      description: 'Developed and aintained multiple web applications using JavaScript and Golang',
     },
-    {
-      year: '2018 - 2020',
-      position: 'Web Developer',
-      company: 'Creative Web Agency',
-      description: 'Built responsive websites and web applications for various clients.',
-    },
+    // {
+    //   year: '2018 - 2020',
+    //   position: 'Web Developer',
+    //   company: 'Creative Web Agency',
+    //   description: 'Built responsive websites and web applications for various clients.',
+    // },
   ];
 
   hoveredSkill: string | null = null;
