@@ -3,6 +3,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@g_wanga/contact-section": [
+        "../g_wanga/contact-section"
+      ],
+      "contact-section": [
+        "../contact-section"
+      ],
+      "contactLib": [
+        "./dist/contact-lib"
+      ]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -28,6 +39,24 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/contact-lib/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/contact-lib/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/contact-section/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/contact-section/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/g_wanga/contact-section/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/g_wanga/contact-section/tsconfig.spec.json"
     }
   ]
 }
