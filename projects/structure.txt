@@ -1,0 +1,19 @@
+.
+├── g_wanga
+│   └── contact-section
+│       ├── ng-package.json
+│       ├── package.json
+│       ├── README.md
+│       ├── src
+│       │   ├── lib
+│       │   │   ├── contact-section.component.ts
+│       │   │   ├── contact-section.spec.ts
+│       │   │   └── contact-section.ts
+│       │   └── public-api.ts
+│       ├── structure.txt
+│       ├── tsconfig.lib.json
+│       ├── tsconfig.lib.prod.json
+│       └── tsconfig.spec.json
+└── structure.txt
+
+5 directories, 12 files
