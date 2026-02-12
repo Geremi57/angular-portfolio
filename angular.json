@@ -21,9 +21,12 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
+                
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/favicon.ico",
+  "src/assets"
             ],
             "styles": [
               "src/styles.css"
@@ -67,6 +70,84 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        }
+      }
+    },
+    "contactLib": {
+      "projectType": "library",
+      "root": "projects/contact-lib",
+      "sourceRoot": "projects/contact-lib/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/contact-lib/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/contact-lib/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/contact-lib/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "contact-section": {
+      "projectType": "library",
+      "root": "projects/g_wanga/contact-section",
+      "sourceRoot": "projects/g_wanga/contact-section/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/contact-section/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/contact-section/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/contact-section/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "@g_wanga/contact-section": {
+      "projectType": "library",
+      "root": "projects/g_wanga/contact-section",
+      "sourceRoot": "projects/g_wanga/contact-section/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/g_wanga/contact-section/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/g_wanga/contact-section/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/g_wanga/contact-section/tsconfig.spec.json"
+          }
         }
       }
     }
