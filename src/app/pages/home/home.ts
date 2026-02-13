@@ -22,7 +22,7 @@ import { FooterComponent } from '../../footer/footer';
     FooterComponent
 ],
   template: `
-    <div class="p-4 bg-black">
+    <div class="p-1 bg-black">
 
       <app-navbar></app-navbar>
      <!-- home.component.html -->

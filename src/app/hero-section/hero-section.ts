@@ -52,18 +52,18 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
             </div>
 
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              <span class="block">Crafting Digital</span>
+              <span class="block">High Performance</span>
               <span
                 class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300"
               >
-                Experiences
+                Engineering
               </span>
             </h1>
 
             <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed">
-              Full-stack developer specializing in modern web technologies. Building performant,
-              accessible, and visually stunning applications that push the boundaries of user
-              experience.
+              Full-stack developer focused on building scalable, accessible,
+               and performant web
+               applications with clean architecture and intuitive user experience.
             </p>
 
             <!-- Technology Icons with Labels -->
