@@ -12,6 +12,7 @@ import {
   keyframes,
   animateChild,
 } from '@angular/animations';
+// import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-services-section',
@@ -20,6 +21,7 @@ import {
   template: ` <section
     id="services"
     class="relative py-20 md:py-32 bg-gradient-to-b from-black via-gray-900 to-blue-950 overflow-hidden"
+    device-width
   >
     <!-- Background Elements -->
     <div class="absolute inset-0">
@@ -58,20 +60,20 @@ import {
       <div class="text-center mb-16 md:mb-20" [@fadeInUp]>
         <div class="inline-flex items-center justify-center space-x-2 mb-4">
           <div class="w-8 h-px bg-gradient-to-r from-blue-400 to-cyan-400"></div>
-          <span class="text-blue-400 font-medium tracking-wider">EXPERT SERVICES</span>
+          <span class="text-blue-400 font-medium tracking-wider">ENGINEERING SPECIALITIES</span>
           <div class="w-8 h-px bg-gradient-to-r from-cyan-400 to-blue-400"></div>
         </div>
 
         <h2 class="text-white text-3xl md:text-5xl font-bold mb-6">
-          Solutions I
+          Technical
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-            Provide</span
+            Strengths</span
           >
         </h2>
 
         <p class="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
-          Comprehensive digital solutions tailored to your business needs, from concept to
-          deployment and beyond.
+          Focused on building scalable systems, performance-driven applications, and well-structured
+          codebases grounded in strong algorithmic thinking.
         </p>
       </div>
 
@@ -98,7 +100,7 @@ import {
       <div *ngIf="activeTab === 'services'" class="mb-20">
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" [@staggerItems]="'enter'">
           <div
-            *ngFor="let service of services; let i = index"
+            *ngFor="let service of specialties; let i = index"
             [@scaleIn]="{ value: '', params: { delay: i * 0.1 + 's' } }"
             class="group"
           >
@@ -175,7 +177,9 @@ import {
                   class="w-full py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-blue-300 hover:text-white hover:bg-blue-800/40 hover:border-blue-500/30 transition-all duration-300 flex items-center justify-center space-x-2 group/btn"
                 >
                   <span>Learn More</span>
-                  <i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform duration-300 text-sm"></i>
+                  <i
+                    class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform duration-300 text-sm"
+                  ></i>
                 </button>
               </div>
 
@@ -188,81 +192,8 @@ import {
         </div>
       </div>
 
-      <!-- Pricing Tabs Content -->
-      <div *ngIf="activeTab === 'pricing'" class="mb-20">
-        <div class="grid md:grid-cols-3 gap-8" [@staggerItems]="'enter'">
-          <div
-            *ngFor="let plan of pricingPlans; let i = index"
-            [@scaleIn]="{ value: '', params: { delay: i * 0.1 + 's' } }"
-            class="group relative"
-          >
-            <!-- Popular Badge -->
-            <div *ngIf="plan.popular" 
-                 class="absolute -top-3 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full text-white text-xs font-bold">
-              Most Popular
-            </div>
-
-            <!-- Pricing Card -->
-            <div
-              [class]="
-                plan.popular
-                  ? 'border-2 border-blue-500/50 bg-gradient-to-br from-blue-900/40 to-black/80'
-                  : 'border border-blue-800/30 bg-gradient-to-br from-gray-900/80 to-blue-950/80'
-              "
-              class="h-full backdrop-blur-sm rounded-2xl p-8 transition-all duration-500 group-hover:translate-y-[-4px] overflow-hidden"
-            >
-              <!-- Plan Header -->
-              <div class="text-center mb-8">
-                <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
-                <p class="text-gray-400 text-sm mb-4">{{ plan.description }}</p>
-
-                <!-- Price -->
-                <div class="mb-6">
-                  <div class="flex items-end justify-center">
-                    <span
-                      class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300"
-                    >
-                      $ {{ plan.price }}
-                    </span>
-                    <span class="text-gray-400 mb-1 ml-1">{{ plan.period }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Features -->
-              <ul class="space-y-4 mb-8">
-                <li *ngFor="let feature of plan.features" class="flex items-start space-x-3">
-                  <i [class]="feature.included ? 'fas fa-check text-green-400' : 'fas fa-times text-gray-600'" 
-                     class="mt-0.5 text-sm"></i>
-                  <span
-                    [class]="feature.included ? 'text-gray-300' : 'text-gray-600'"
-                    class="text-sm"
-                  >
-                    {{ feature.text }}
-                  </span>
-                </li>
-              </ul>
-
-              <!-- CTA Button -->
-              <div class="text-center">
-                <button
-                  (click)="selectPlan(plan)"
-                  [class]="
-                    plan.popular
-                      ? 'w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl font-semibold text-white hover:from-blue-500 hover:to-cyan-400 transform hover:scale-105 transition-all duration-300'
-                      : 'w-full py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-blue-300 hover:text-white hover:bg-blue-800/40 hover:border-blue-500/30 transition-all duration-300'
-                  "
-                >
-                  Get Started
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Process Timeline -->
-      <div class="mt-32" [@fadeInUp]="{ value: '', params: { delay: '0.3s' } }">
+      <!-- Process Timeline (Now shows when Pricing tab is active) -->
+      <div *ngIf="activeTab === 'process'" class="mt-20 pt-10 border-t border-blue-800/30">
         <div class="text-center mb-12">
           <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
             My
@@ -328,45 +259,36 @@ import {
             </div>
 
             <!-- Spacer for timeline -->
-            <div class="h-0 md:h-[640px]"></div>
+            <div class="h-0 md:h-[960px]"></div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- CTA Section -->
-      <div class="mt-90 text-center" [@fadeInUp]="{ value: '', params: { delay: '0.5s' } }">
+    <!-- CTA Section (Shown in both tabs) -->
+    <div class="mt-90 text-center" [@fadeInUp]="{ value: '', params: { delay: '0.5s' } }">
+      <div
+        class="bg-gradient-to-r from-blue-900/30 via-black/50 to-cyan-900/30 border border-blue-800/30 rounded-2xl p-8 md:p-12 backdrop-blur-sm max-w-3xl mx-auto"
+      >
         <div
-          class="bg-gradient-to-r from-blue-900/30 via-black/50 to-cyan-900/30 border border-blue-800/30 rounded-2xl p-8 md:p-12 backdrop-blur-sm max-w-3xl mx-auto"
+          class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center mx-auto mb-6"
         >
-          <div
-            class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center mx-auto mb-6"
+          <i class="fas fa-comments text-white text-2xl"></i>
+        </div>
+
+        <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Wanna Know more?</h3>
+        <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+          Engineering is about clarity, efficiency, and resilience. If you're building something
+          ambitious, let's connect.
+        </p>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-center">
+          <button
+            (click)="scrollTocontact()"
+            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl font-semibold hover:from-blue-500 hover:to-cyan-400 transform hover:scale-105 transition-all duration-300"
           >
-            <i class="fas fa-comments text-white text-2xl"></i>
-          </div>
-
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
-            Ready to Start Your Project?
-          </h3>
-          <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
-            Let's discuss your ideas and requirements. I'll provide a detailed proposal and timeline
-            for your project.
-          </p>
-
-          <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <button
-              (click)="openContactModal()"
-              class="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl font-semibold hover:from-blue-500 hover:to-cyan-400 transform hover:scale-105 transition-all duration-300"
-            >
-              Get Free Consultation
-            </button>
-
-            <button
-              (click)="downloadBrochure()"
-              class="px-8 py-4 border-2 border-blue-400/30 rounded-xl font-semibold text-blue-300 hover:text-white hover:border-blue-400/50 hover:bg-blue-900/30 transition-all duration-300"
-            >
-              Download Brochure
-            </button>
-          </div>
+            Reach out
+          </button>
         </div>
       </div>
     </div>
@@ -440,22 +362,27 @@ import {
       ]),
     ]),
     trigger('slideIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX({{direction}})' }),
-        animate('0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)', 
-          style({ opacity: 1, transform: 'translateX(0)' }))
-      ], { params: { direction: '-30px' } })
-    ])
+      transition(
+        ':enter',
+        [
+          style({ opacity: 0, transform: 'translateX({{direction}})' }),
+          animate(
+            '0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+            style({ opacity: 1, transform: 'translateX(0)' })
+          ),
+        ],
+        { params: { direction: '-30px' } }
+      ),
+    ]),
   ],
 })
-
 export class ServicesSectionComponent implements OnInit {
   activeTab = 'services';
   selectedPlan: any = null;
 
   serviceTabs = [
     { id: 'services', label: 'Services' },
-    { id: 'pricing', label: 'Pricing' },
+    { id: 'process', label: 'Process' },
   ];
 
   animatedGears = [
@@ -465,101 +392,70 @@ export class ServicesSectionComponent implements OnInit {
     { x: 85, y: 65, delay: 1 },
   ];
 
-  services = [
+  specialties = [
     {
       id: 1,
-      title: 'Custom Web Development',
+      title: 'Algorithmic Problem Solving',
       description:
-        'Tailored web applications built with modern frameworks, optimized for performance and scalability.',
-      icon: 'fas fa-code',
+        'Strong foundation in low-level programming and algorithm design built through intensive peer-based training.',
+      icon: 'fas fa-brain',
       color: '#3b82f6',
       features: [
-        'Custom Angular/React applications',
-        'Responsive design implementation',
-        'API integration & development',
-        'Performance optimization',
-        'SEO-friendly architecture',
+        'C programming (memory, pointers, structs)',
+        'Go concurrency & problem solving',
+        'Sorting & stack algorithms (push-swap)',
+        'Sudoku solver implementation',
+        'Manual memory management mindset',
       ],
-      technologies: ['Angular', 'React', 'Node.js', 'TypeScript', 'Tailwind CSS'],
+      technologies: ['C', 'Go', 'Algorithms', 'Data Structures', 'Unix'],
     },
     {
       id: 2,
-      title: 'UI/UX Design',
+      title: 'Vanilla JavaScript Engineering',
       description:
-        'User-centered design solutions that enhance user experience and drive engagement.',
-      icon: 'fas fa-paint-brush',
+        'Building dynamic applications from scratch without heavy frameworks to master core web fundamentals.',
+      icon: 'fas fa-code',
       color: '#06b6d4',
       features: [
-        'User research & persona creation',
-        'Wireframing & prototyping',
-        'Visual design systems',
-        'Interaction design',
-        'Usability testing',
+        'DOM manipulation & rendering logic',
+        'LocalStorage state management',
+        'Modular architecture (no frameworks)',
+        'Interactive UI systems',
+        'Performance-focused implementation',
       ],
-      technologies: ['Figma', 'Adobe XD', 'Sketch', 'InVision', 'Principle'],
+      technologies: ['JavaScript', 'HTML', 'CSS', 'Web APIs', 'ES6+'],
     },
     {
       id: 3,
-      title: 'Mobile App Development',
+      title: 'Full-Stack Application Development',
       description:
-        'Cross-platform mobile applications using Ionic and React Native for maximum reach.',
-      icon: 'fas fa-mobile-alt',
-      color: '#8b5cf6',
+        'Designing and building complete applications — from backend logic to interactive frontends.',
+      icon: 'fas fa-layer-group',
+      color: '#f59e0b',
       features: [
-        'iOS & Android development',
-        'Cross-platform solutions',
-        'Push notifications',
-        'Offline functionality',
-        'App store deployment',
+        'REST API design',
+        'Authentication & validation',
+        'Frontend-backend integration',
+        'State-driven UI design',
+        'Scalable project structure',
       ],
-      technologies: ['Ionic', 'React Native', 'Capacitor', 'Firebase', 'PWA'],
+      technologies: ['Angular', 'Node.js', 'TypeScript', 'Express', 'MongoDB'],
     },
     {
       id: 4,
-      title: 'E-Commerce Solutions',
+      title: 'Peer-Based & Collaborative Engineering',
       description:
-        'Complete e-commerce platforms with secure payment processing and inventory management.',
-      icon: 'fas fa-shopping-cart',
-      color: '#10b981',
-      features: [
-        'Shopping cart & checkout',
-        'Payment gateway integration',
-        'Inventory management',
-        'Order tracking',
-        'Analytics dashboard',
-      ],
-      technologies: ['Stripe', 'PayPal', 'WooCommerce', 'Magento', 'Shopify'],
-    },
-    {
-      id: 5,
-      title: 'API Development',
-      description: 'Robust RESTful APIs and GraphQL endpoints for seamless data integration.',
-      icon: 'fas fa-server',
-      color: '#f59e0b',
-      features: [
-        'RESTful API development',
-        'GraphQL implementation',
-        'Authentication & authorization',
-        'Rate limiting',
-        'API documentation',
-      ],
-      technologies: ['Node.js', 'Express', 'GraphQL', 'JWT', 'Swagger'],
-    },
-    {
-      id: 6,
-      title: 'Consulting & Training',
-      description:
-        "Expert guidance and training sessions to elevate your team's technical capabilities.",
-      icon: 'fas fa-chalkboard-teacher',
+        'Thriving in rigorous, peer-driven environments that demand code quality, clarity, and resilience.',
+      icon: 'fas fa-users',
       color: '#ef4444',
       features: [
-        'Technical consulting',
-        'Code reviews',
-        'Team training sessions',
-        'Architecture guidance',
-        'Best practices workshops',
+        'Peer code reviews (Zone01 model)',
+        'Technical presentations',
+        'Independent research & debugging',
+        'Resilient under pressure',
+        'Continuous skill evolution',
       ],
-      technologies: ['Angular', 'TypeScript', 'CI/CD', 'Testing', 'Architecture'],
+      technologies: ['Git', 'Linux', 'CLI', 'Debugging', 'Code Reviews'],
     },
   ];
 
@@ -622,37 +518,40 @@ export class ServicesSectionComponent implements OnInit {
 
   processSteps = [
     {
-      title: 'Discovery & Planning',
+      title: 'Problem Deconstruction',
       description:
-        'Understanding your requirements, goals, and creating a detailed project roadmap.',
-      icon: 'fas fa-search',
+        'Breaking complex problems into smaller logical units, defining constraints, edge cases, and optimal approaches before writing code.',
+      icon: 'fas fa-project-diagram',
     },
     {
-      title: 'Design & Prototyping',
-      description: 'Creating wireframes, mockups, and interactive prototypes for approval.',
-      icon: 'fas fa-pencil-ruler',
-    },
-    {
-      title: 'Development',
-      description: 'Building the application with clean, maintainable code and modern practices.',
-      icon: 'fas fa-code',
-    },
-    {
-      title: 'Testing & Quality Assurance',
+      title: 'System & Architecture Design',
       description:
-        'Rigorous testing across devices and browsers to ensure quality and performance.',
-      icon: 'fas fa-vial',
+        'Designing scalable structures for frontend and backend systems with clear separation of concerns and maintainable patterns.',
+      icon: 'fas fa-sitemap',
     },
     {
-      title: 'Deployment & Launch',
-      description: 'Deploying to production, configuring servers, and ensuring smooth launch.',
-      icon: 'fas fa-rocket',
-    },
-    {
-      title: 'Support & Maintenance',
+      title: 'Algorithmic Implementation',
       description:
-        'Ongoing support, updates, and maintenance to keep your application running smoothly.',
-      icon: 'fas fa-tools',
+        'Translating logic into efficient, readable code with attention to performance, memory, and data structures.',
+      icon: 'fas fa-brain',
+    },
+    {
+      title: 'Iterative Testing & Debugging',
+      description:
+        'Manual testing, edge-case validation, and systematic debugging to ensure correctness and reliability.',
+      icon: 'fas fa-bug',
+    },
+    {
+      title: 'Integration & Optimization',
+      description:
+        'Connecting frontend and backend systems, optimizing rendering cycles, API calls, and overall application flow.',
+      icon: 'fas fa-layer-group',
+    },
+    {
+      title: 'Continuous Refinement',
+      description:
+        'Refactoring, peer feedback integration, and performance improvements to elevate code quality over time.',
+      icon: 'fas fa-sync-alt',
     },
   ];
 
@@ -726,6 +625,13 @@ export class ServicesSectionComponent implements OnInit {
       setTimeout(() => {
         button.classList.remove('ring-4', 'ring-blue-500/30');
       }, 1000);
+    }
+  }
+
+  scrollTocontact() {
+    const el = document.getElementById('contact');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
