@@ -15,12 +15,16 @@ import { FooterComponent } from './footer/footer';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    // Home
-  ],
+    NavbarComponent,
+    FooterComponent
+],
   template: `
     <div class="p-0 bg-black">
       <!-- <home></home> -->
+       <app-navbar></app-navbar>
+       <!-- <app-hero-section></app-hero-section> -->
       <router-outlet></router-outlet>
+      <app-footer></app-footer>
     </div>
   `,
   styleUrl: './app.css',
