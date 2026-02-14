@@ -349,59 +349,57 @@ export class NavbarComponent implements OnInit {
   buttonHover = false;
 
   navItems = [
-    {
-      id: 'home',
-      label: 'Home',
-      route: '/',
-      icon: true,
-      fragment: 'home',
-
-    },
-    {
-      id: 'projects',
-      label: 'Projects',
-      route: '/',
-      icon: true,
-      fragment: 'projects',
-    },
-    {
-      id: 'services',
-      label: 'Services',
-      fragment: 'services',
-      dropdown: [
-        { label: 'Web Development', href: '#web-dev' },
-        { label: 'UI/UX Design', href: '#ui-ux' },
-        { label: 'Consulting', href: '#consulting' },
-        { label: 'Training', href: '#training' },
-      ],
-    },
-    {
-      id: 'portfolio',
-      label: 'Portfolio',
-      fragment: 'portfolio',
-      
-      dropdown: [
-        { label: 'Recent Work', href: '#recent' },
-        { label: 'Case Studies', href: '#case-studies' },
-        { label: 'Client Projects', href: '#client' },
-        { label: 'Personal Projects', href: '#personal' },
-      ],
-    },
-    {
-      id: 'blog',
-      label: 'Blog',
-      route: '/',
-      icon: true,
-      fragment: 'blog',
-    },
-    {
-      id: 'about',
-      label: 'About',
-      route: '/',
-      icon: true,
-      fragment: 'about',
-    },
-  ];
+  {
+    id: 'home',
+    label: 'Home',
+    route: '/',
+    icon: true,
+    fragment: 'home',
+  },
+  {
+    id: 'projects',
+    label: 'Projects',
+    route: '/',
+    icon: true,
+    fragment: 'projects',
+  },
+  {
+    id: 'services',
+    label: 'Services',
+    fragment: 'services',
+    dropdown: [
+      { label: 'Web Development', href: '#web-dev' },
+      { label: 'UI/UX Design', href: '#ui-ux' },
+      { label: 'Consulting', href: '#consulting' },
+      { label: 'Training', href: '#training' },
+    ],
+  },
+  {
+    id: 'portfolio',
+    label: 'Portfolio',
+    fragment: 'portfolio',
+    dropdown: [
+      { label: 'Recent Work', href: '#recent' },
+      { label: 'Case Studies', href: '#case-studies' },
+      { label: 'Client Projects', href: '#client' },
+      { label: 'Personal Projects', href: '#personal' },
+    ],
+  },
+  {
+    id: 'blog',
+    label: 'Blog',
+    route: '/blog',        // Change this from '/' to '/blog'
+    icon: true,
+    fragment: '',           // Remove the fragment since it's a separate page
+  },
+  {
+    id: 'about',
+    label: 'About',
+    route: '/',
+    icon: true,
+    fragment: 'about',
+  },
+];
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
