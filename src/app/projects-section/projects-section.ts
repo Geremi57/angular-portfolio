@@ -31,11 +31,10 @@ interface Project {
   template: `
     <section
       id="projects"
-      class="relative py-20 md:py-32 bg-gradient-to-b from-blue-950 via-black to-gray-900 overflow-hidden"
+      class="relative py-16 md:py-32 bg-gradient-to-b from-blue-950 via-black to-gray-900 overflow-hidden"
     >
-      <!-- Background Elements -->
+      <!-- Background Elements (kept same) -->
       <div class="absolute inset-0">
-        <!-- Animated circuit board pattern -->
         <div
           class="absolute inset-0 opacity-5"
           style="background-image: 
@@ -44,7 +43,6 @@ interface Project {
                     background-size: 50px 50px;"
         ></div>
 
-        <!-- Floating code snippets -->
         <div
           *ngFor="let snippet of floatingCode"
           [style.left]="snippet.x + '%'"
@@ -55,7 +53,6 @@ interface Project {
           {{ snippet.code }}
         </div>
 
-        <!-- Glowing orbs -->
         <div
           class="absolute -top-20 -right-20 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"
         ></div>
@@ -66,22 +63,22 @@ interface Project {
       </div>
 
       <div class="relative z-10 container mx-auto px-4">
-        <!-- Section Header -->
-        <div class="text-center mb-16 md:mb-20" [@fadeInUp]>
+        <!-- Section Header - Reduced margin on mobile -->
+        <div class="text-center mb-12 md:mb-20" [@fadeInUp]>
           <div class="inline-flex items-center justify-center space-x-2 mb-4">
             <div class="w-6 h-px bg-gradient-to-r from-blue-400 to-cyan-400"></div>
-            <span class="text-blue-400 font-medium tracking-wider">PORTFOLIO</span>
+            <span class="text-blue-400 font-medium tracking-wider text-sm md:text-base">PORTFOLIO</span>
             <div class="w-6 h-px bg-gradient-to-r from-cyan-400 to-blue-400"></div>
           </div>
 
-          <h2 class="text-white text-3xl md:text-5xl font-bold mb-6">
+          <h2 class="text-white text-2xl md:text-5xl font-bold mb-4 md:mb-6">
             Featured
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
               Projects</span
             >
           </h2>
 
-          <p class="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
+          <p class="text-gray-400 text-base md:text-xl max-w-3xl mx-auto px-4">
             A collection of my latest work showcasing expertise in modern web development,
             innovative design, and problem-solving through technology.
           </p>
@@ -89,7 +86,7 @@ interface Project {
 
         <!-- Projects Carousel -->
         <div class="relative max-w-6xl mx-auto">
-          <!-- Navigation Arrows -->
+          <!-- Navigation Arrows (hidden on mobile) -->
           <button
             (click)="prevProject()"
             class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-12 h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 hover:scale-110 active:scale-95 transition-all duration-300 items-center justify-center z-20 group"
@@ -128,9 +125,9 @@ interface Project {
             </svg>
           </button>
 
-          <!-- Project Cards Container -->
+          <!-- Project Cards Container - Taller on mobile -->
           <div
-            class="relative h-[500px] md:h-[600px] overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900/20 via-black/40 to-gray-900/30 border border-blue-800/30 backdrop-blur-sm"
+            class="relative h-[650px] md:h-[600px] overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-blue-900/20 via-black/40 to-gray-900/30 border border-blue-800/30 backdrop-blur-sm"
           >
             <div class="absolute inset-0">
               <!-- Active Project Display -->
@@ -139,66 +136,68 @@ interface Project {
                 [@slideAnimation]="slideDirection"
                 class="absolute inset-0"
               >
-                <div class="h-full grid lg:grid-cols-2 gap-0">
-                  <!-- Project Image/Visual with Gallery -->
+                <!-- Mobile Layout: Image on top, details below -->
+                <div class="h-full flex flex-col lg:grid lg:grid-cols-2 gap-0">
+                  <!-- Project Image - Smaller on mobile -->
                   <div
-                    class="relative h-full min-h-[300px] md:min-h-[400px] overflow-hidden bg-gradient-to-br from-blue-900 to-cyan-900"
+                    class="relative h-[200px] md:h-[250px] lg:h-full lg:min-h-[400px] overflow-hidden bg-gradient-to-br from-blue-900 to-cyan-900 flex-shrink-0"
                   >
                     <!-- Main Image Display -->
                     <div class="absolute inset-0">
                       <img 
                         [src]="getCurrentImage()" 
                         [alt]="currentProject?.title || 'Project screenshot'"
-                        class="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-110"
+                        class="w-full h-full object-cover object-top"
                         loading="lazy"
                         (error)="handleImageError($event)"
                       />
                     </div>
                     
-                    <!-- Dark Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-black/50"></div>
+                    <!-- Dark Overlay - Lighter on mobile -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-black/30 lg:from-blue-900/50 lg:to-black/50"></div>
                     
-                    <!-- Image Navigation Arrows (if multiple images) -->
+                    <!-- Image Navigation Arrows (if multiple images) - Smaller on mobile -->
                     <div *ngIf="hasMultipleImages()" 
-                         class="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between px-4 z-30">
+                         class="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between px-2 lg:px-4 z-30">
                       <button 
                         (click)="prevImage(); $event.stopPropagation()"
-                        class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-300 flex items-center justify-center"
+                        class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-300 flex items-center justify-center text-sm lg:text-base"
                         [disabled]="isLoading"
                       >
                         ←
                       </button>
                       <button 
                         (click)="nextImage(); $event.stopPropagation()"
-                        class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-300 flex items-center justify-center"
+                        class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-300 flex items-center justify-center text-sm lg:text-base"
                         [disabled]="isLoading"
                       >
                         →
                       </button>
                     </div>
                     
-                    <!-- Image Counter -->
+                    <!-- Image Counter - Smaller on mobile -->
                     <div *ngIf="hasMultipleImages()" 
-                         class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full z-30">
+                         class="absolute top-2 right-2 lg:top-4 lg:right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full z-30">
                       {{ currentImageIndex + 1 }} / {{ getGalleryImageCount() }}
                     </div>
                     
-                    <!-- Image Thumbnails Dots -->
+                    <!-- Image Thumbnails Dots - Smaller on mobile -->
                     <div *ngIf="hasMultipleImages()" 
-                         class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+                         class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1 lg:space-x-2 z-30">
                       <button 
                         *ngFor="let image of getGalleryImages(); let i = index; trackBy: trackByIndex"
                         (click)="currentImageIndex = i; $event.stopPropagation()"
-                        class="w-2 h-2 rounded-full transition-all duration-300"
-                        [class.w-4]="currentImageIndex === i"
+                        class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full transition-all duration-300"
+                        [class.w-3]="currentImageIndex === i"
+                        [class.lg:w-4]="currentImageIndex === i"
                         [class.bg-blue-400]="currentImageIndex === i"
                         [class.bg-white/50]="currentImageIndex !== i"
                         [class.hover:bg-white/80]="currentImageIndex !== i"
                       ></button>
                     </div>
                     
-                    <!-- Tags Overlay -->
-                    <div class="absolute top-4 left-4 z-20 flex flex-wrap gap-2">
+                    <!-- Tags Overlay - Hide on mobile, show on desktop -->
+                    <div class="hidden lg:flex absolute top-4 left-4 z-20 flex-wrap gap-2">
                       <div
                         *ngFor="let tag of currentProject?.tags || []"
                         class="px-3 py-1 bg-blue-900/80 backdrop-blur-sm rounded-full text-xs text-blue-300 border border-blue-700/30"
@@ -210,59 +209,69 @@ interface Project {
                     <!-- Loading Spinner -->
                     <div *ngIf="isLoading" 
                          class="absolute inset-0 flex items-center justify-center bg-black/50 z-40">
-                      <div class="w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                      <div class="w-8 h-8 lg:w-10 lg:h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                   </div>
 
-                  <!-- Project Details -->
+                  <!-- Project Details - Scrollable on mobile with less padding -->
                   <div
-                    class="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm overflow-y-auto"
+                    class="flex-1 p-4 md:p-6 lg:p-12 flex flex-col bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm overflow-y-auto"
                   >
-                    <!-- Project Header -->
-                    <div class="mb-6">
-                      <div class="inline-flex items-center space-x-2 mb-4">
+                    <!-- Tags - Show on mobile here instead of on image -->
+                    <div class="flex flex-wrap gap-1.5 mb-3 lg:hidden">
+                      <div
+                        *ngFor="let tag of currentProject?.tags || []"
+                        class="px-2 py-0.5 bg-blue-900/60 backdrop-blur-sm rounded-full text-xs text-blue-300 border border-blue-700/30"
+                      >
+                        {{ tag }}
+                      </div>
+                    </div>
+
+                    <!-- Project Header - Smaller text on mobile -->
+                    <div class="mb-4 lg:mb-6">
+                      <div class="flex items-center space-x-2 mb-2 lg:mb-4">
                         <span
-                          class="px-3 py-1 bg-blue-900/50 border border-blue-700/30 rounded-full text-sm text-blue-300"
+                          class="px-2 py-0.5 lg:px-3 lg:py-1 bg-blue-900/50 border border-blue-700/30 rounded-full text-xs lg:text-sm text-blue-300"
                         >
                           {{ currentProject?.category || 'Project' }}
                         </span>
-                        <span class="text-gray-400 text-sm">{{ currentProject?.year || '' }}</span>
+                        <span class="text-gray-400 text-xs lg:text-sm">{{ currentProject?.year || '' }}</span>
                       </div>
 
-                      <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                      <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 lg:mb-4">
                         {{ currentProject?.title || 'Project Title' }}
                       </h3>
 
-                      <p class="text-gray-300 mb-6 leading-relaxed">
+                      <p class="text-gray-300 text-sm lg:text-base leading-relaxed line-clamp-3 lg:line-clamp-none">
                         {{ currentProject?.description || 'Project description goes here.' }}
                       </p>
                     </div>
 
-                    <!-- Technologies Used -->
-                    <div class="mb-8">
-                      <h4 class="text-lg font-semibold text-blue-300 mb-3">Technologies</h4>
-                      <div class="flex flex-wrap gap-2">
+                    <!-- Technologies Used - Smaller chips on mobile -->
+                    <div class="mb-4 lg:mb-8">
+                      <h4 class="text-base lg:text-lg font-semibold text-blue-300 mb-2 lg:mb-3">Technologies</h4>
+                      <div class="flex flex-wrap gap-1.5 lg:gap-2">
                         <div
                           *ngFor="let tech of currentProject?.technologies || []"
-                          class="px-3 py-1.5 bg-blue-900/40 border border-blue-700/20 rounded-lg text-sm text-blue-300 hover:bg-blue-800/40 hover:border-blue-500/30 transition-colors duration-300"
+                          class="px-2 py-1 lg:px-3 lg:py-1.5 bg-blue-900/40 border border-blue-700/20 rounded-lg text-xs lg:text-sm text-blue-300 hover:bg-blue-800/40 hover:border-blue-500/30 transition-colors duration-300"
                         >
                           {{ tech }}
                         </div>
                       </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="flex flex-wrap gap-4 mt-auto pt-6">
+                    <!-- Action Buttons - Stack on mobile -->
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-auto pt-4 lg:pt-6">
                       <a
                         *ngIf="currentProject?.liveLink"
                         [href]="currentProject?.liveLink"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold hover:from-blue-500 hover:to-cyan-400 transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 group"
+                        class="px-4 py-2.5 lg:px-6 lg:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-sm lg:text-base hover:from-blue-500 hover:to-cyan-400 transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 group"
                       >
                         <span>Live Preview</span>
                         <svg
-                          class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                          class="w-4 h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -281,7 +290,7 @@ interface Project {
                         [href]="currentProject?.githubLink"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="px-6 py-3 border-2 border-blue-400/30 rounded-lg font-semibold hover:border-blue-400/50 hover:bg-blue-900/30 transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 group"
+                        class="px-4 py-2.5 lg:px-6 lg:py-3 border-2 border-blue-400/30 rounded-lg font-semibold text-sm lg:text-base hover:border-blue-400/50 hover:bg-blue-900/30 transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 group"
                       >
                         <span class="text-cyan-500">View Code</span>
                         <i class="fa-brands fa-github text-cyan-400"></i>
@@ -292,15 +301,15 @@ interface Project {
               </div>
             </div>
 
-            <!-- Project Indicators (Dots) -->
-            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+            <!-- Project Indicators (Dots) - Moved up a bit on mobile -->
+            <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
               <button
                 *ngFor="let project of projects; let i = index; trackBy: trackByIndex"
                 (click)="goToProject(i)"
                 [class]="
                   currentIndex === i
-                    ? 'w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 ring-4 ring-blue-400/20'
-                    : 'w-3 h-3 rounded-full bg-gray-600 hover:bg-gray-500 transition-colors duration-300'
+                    ? 'w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 ring-4 ring-blue-400/20'
+                    : 'w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-gray-600 hover:bg-gray-500 transition-colors duration-300'
                 "
               >
                 <span class="sr-only">Go to project {{ i + 1 }}</span>
@@ -308,13 +317,13 @@ interface Project {
             </div>
           </div>
 
-          <!-- Mobile Navigation -->
-          <div class="flex justify-center space-x-6 mt-8 lg:hidden">
+          <!-- Mobile Navigation - Improved spacing -->
+          <div class="flex justify-center space-x-6 mt-12 lg:hidden">
             <button
               (click)="prevProject()"
-              class="w-12 h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
+              class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -325,16 +334,16 @@ interface Project {
             </button>
 
             <div class="flex items-center space-x-1">
-              <span class="text-blue-400 font-bold">{{ currentIndex + 1 }}</span>
-              <span class="text-gray-400">/</span>
-              <span class="text-gray-400">{{ projects.length }}</span>
+              <span class="text-blue-400 font-bold text-sm lg:text-base">{{ currentIndex + 1 }}</span>
+              <span class="text-gray-400 text-sm lg:text-base">/</span>
+              <span class="text-gray-400 text-sm lg:text-base">{{ projects.length }}</span>
             </div>
 
             <button
               (click)="nextProject()"
-              class="w-12 h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
+              class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -346,16 +355,16 @@ interface Project {
           </div>
         </div>
 
-        <!-- View All Projects CTA -->
-        <div class="text-center mt-16" [@fadeInUp]="{ value: '', params: { delay: '0.3s' } }">
-          <div class="inline-flex items-center space-x-4">
-            <div class="w-24 h-px bg-gradient-to-r from-blue-600/30 to-cyan-600/30"></div>
+        <!-- View All Projects CTA - Smaller on mobile -->
+        <div class="text-center mt-16 lg:mt-20" [@fadeInUp]="{ value: '', params: { delay: '0.3s' } }">
+          <div class="inline-flex items-center space-x-2 lg:space-x-4">
+            <div class="w-12 lg:w-24 h-px bg-gradient-to-r from-blue-600/30 to-cyan-600/30"></div>
             <button
-              class="px-8 py-4 border-2 border-blue-400/30 rounded-xl font-semibold hover:border-blue-400/50 hover:bg-blue-900/30 transform hover:scale-105 transition-all duration-300 group"
+              class="px-6 py-3 lg:px-8 lg:py-4 border-2 border-blue-400/30 rounded-lg lg:rounded-xl font-semibold text-sm lg:text-base hover:border-blue-400/50 hover:bg-blue-900/30 transform hover:scale-105 transition-all duration-300 group"
             >
               <span class="text-blue-300 group-hover:text-white">View All Projects</span>
               <svg
-                class="w-5 h-5 inline-block ml-2 group-hover:translate-x-1 transition-transform duration-300"
+                class="w-4 h-4 lg:w-5 lg:h-5 inline-block ml-1 lg:ml-2 group-hover:translate-x-1 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -368,7 +377,7 @@ interface Project {
                 ></path>
               </svg>
             </button>
-            <div class="w-24 h-px bg-gradient-to-l from-blue-600/30 to-cyan-600/30"></div>
+            <div class="w-12 lg:w-24 h-px bg-gradient-to-l from-blue-600/30 to-cyan-600/30"></div>
           </div>
         </div>
       </div>
@@ -400,6 +409,13 @@ interface Project {
       }
       .scrollbar-hide::-webkit-scrollbar {
         display: none;
+      }
+      /* Add line-clamp utility */
+      .line-clamp-3 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
       }
     `,
   ],
