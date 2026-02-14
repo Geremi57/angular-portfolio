@@ -93,7 +93,7 @@ import {
                       <div
                         class="w-full h-full rounded-full bg-gradient-to-br from-blue-800 to-cyan-700 flex items-center justify-center"
                       >
-                       <img src="profile(2).jpeg" class="h-full w-full object-cover"/>
+                        <img src="profile(2).jpeg" class="h-full w-full object-cover" />
                       </div>
                     </div>
                     <!-- Status indicator -->
@@ -305,8 +305,8 @@ import {
                     (click)="downloadCV()"
                     class="mt-6 px-6 py-3 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-lg font-semibold hover:from-blue-600 hover:to-cyan-500 transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 group"
                   >
-                    <span>Download CV</span>
-                    <svg
+                    <span>Resume</span>
+                    <!-- <svg
                       class="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300"
                       fill="none"
                       stroke="currentColor"
@@ -318,7 +318,10 @@ import {
                         stroke-width="2"
                         d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                       ></path>
-                    </svg>
+                    </svg> -->
+                     <i
+                          class="fas fa-external-link-alt group-hover/link:translate-x-1 transition-transform duration-300 text-sm"
+                        ></i>
                   </button>
                 </div>
               </div>
@@ -407,7 +410,7 @@ export class AboutSectionComponent implements OnInit {
     },
     {
       name: 'LinkedIn',
-      link: 'https://www.linkedin.com/in/geremi-wanga-g2018wtk/' ,
+      link: 'https://www.linkedin.com/in/geremi-wanga-g2018wtk/',
       icon: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z',
     },
     {
@@ -470,9 +473,10 @@ export class AboutSectionComponent implements OnInit {
 
   downloadCV() {
     // Simulate CV download
-    console.log('Downloading CV...');
+    // console.log('Downloading CV...');
     // In real implementation, you would trigger a file download
     // window.open('/assets/cv.pdf', '_blank');
+    window.open('Black White Minimalist CV Resume-1.pdf', '_blank');
 
     // Show download success feedback
     const button = document.querySelector('button[aria-label="Download CV"]') as HTMLElement;
