@@ -489,39 +489,7 @@ export class BlogSectionComponent implements OnInit {
       readTime: '6 min read',
       featured: false,
     },
-    {
-      id: 4,
-      title: 'State Management Patterns in Modern Angular Apps',
-      summary:
-        'Comparing different state management solutions and patterns for complex Angular applications.',
-      tags: ['State Management', 'NgRx', 'RxJS'],
-      category: 'Patterns',
-      date: 'Oct 22, 2023',
-      readTime: '10 min read',
-      featured: true,
-    },
-    {
-      id: 5,
-      title: 'Creating Beautiful UIs with Tailwind CSS and Angular',
-      summary:
-        'How to leverage the power of Tailwind CSS to build stunning, responsive interfaces in Angular applications.',
-      tags: ['Tailwind', 'UI/UX', 'Design'],
-      category: 'Design',
-      date: 'Oct 5, 2023',
-      readTime: '7 min read',
-      featured: false,
-    },
-    {
-      id: 6,
-      title: 'Testing Strategies for Enterprise Angular Applications',
-      summary:
-        'A deep dive into testing methodologies and tools for maintaining high-quality Angular codebases.',
-      tags: ['Testing', 'Jasmine', 'Cypress'],
-      category: 'Testing',
-      date: 'Sep 18, 2023',
-      readTime: '11 min read',
-      featured: true,
-    },
+   
   ];
 
   floatingText = [
