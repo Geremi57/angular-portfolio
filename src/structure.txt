@@ -1,0 +1,73 @@
+.
+├── app
+│   ├── about-section
+│   │   ├── about-section.css
+│   │   ├── about-section.spec.ts
+│   │   └── about-section.ts
+│   ├── app.config.ts
+│   ├── app.css
+│   ├── app.html
+│   ├── app.routes.ts
+│   ├── app.spec.ts
+│   ├── app.ts
+│   ├── blog-section
+│   │   ├── blog-section.css
+│   │   ├── blog-section.spec.ts
+│   │   └── blog-section.ts
+│   ├── contact-section
+│   │   ├── contact-section.css
+│   │   ├── contact-section.spec.ts
+│   │   └── contact-section.ts
+│   ├── footer
+│   │   ├── footer.css
+│   │   ├── footer.spec.ts
+│   │   └── footer.ts
+│   ├── hero-section
+│   │   ├── hero-section.css
+│   │   ├── hero-section.spec.ts
+│   │   └── hero-section.ts
+│   ├── nav-bar
+│   │   ├── nav-bar.css
+│   │   ├── nav-bar.spec.ts
+│   │   └── nav-bar.ts
+│   ├── pages
+│   │   └── home
+│   │       ├── home.css
+│   │       ├── home.spec.ts
+│   │       └── home.ts
+│   ├── projects-section
+│   │   ├── projects-section.css
+│   │   ├── projects-section.spec.ts
+│   │   └── projects-section.ts
+│   └── services-section
+│       ├── services-section.css
+│       ├── services-section.spec.ts
+│       └── services-section.ts
+├── assets
+│   ├── Black White Minimalist CV Resume-1.pdf
+│   ├── profile.png
+│   ├── projects
+│   │   └── images
+│   │       ├── fallback.png
+│   │       ├── llm
+│   │       │   ├── Space-llm.png
+│   │       │   ├── template-llm.png
+│   │       │   ├── upload-llm.png
+│   │       │   └── voice-llm.png
+│   │       ├── ph
+│   │       │   ├── answer-ph.png
+│   │       │   ├── details-card.png
+│   │       │   └── purpleHeyz.png
+│   │       └── ra
+│   │           ├── apartments.png
+│   │           ├── details-ra.png
+│   │           ├── Real-Estate.png
+│   │           └── sliders-ra.png
+│   └── Screenshot from 2026-02-02 16-29-57.png
+├── index.html
+├── main.ts
+├── _redirects
+├── structure.txt
+└── styles.css
+
+18 directories, 53 files
