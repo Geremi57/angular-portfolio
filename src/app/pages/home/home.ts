@@ -32,17 +32,6 @@ import { FooterComponent } from '../../footer/footer';
   <app-projects-section></app-projects-section>
 </section>
 
-<div class="text-center mt-12">
-  <a routerLink="/blog"
-     class="inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-xl font-semibold hover:from-blue-600 hover:to-cyan-500 transform hover:scale-105 transition-all duration-300 group">
-    <span>View All Articles</span>
-    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" 
-         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-    </svg>
-  </a>
-</div>
-
 <section id="services" class="scroll-mt-20">
   <app-services-section></app-services-section>
 </section>
