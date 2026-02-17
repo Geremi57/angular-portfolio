@@ -19,6 +19,7 @@ import { FooterComponent } from '../../footer/footer';
     ServicesSectionComponent,
     ContactSectionComponent,
 ],
+
   template: `
     <div class="p-1 bg-black">
 
