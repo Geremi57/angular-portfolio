@@ -2,6 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import emailjs from '@emailjs/browser';
+import { environment } from '../../environments';
 import {
   trigger,
   transition,
@@ -39,7 +41,9 @@ import {
       <div class="relative z-10 container mx-auto px-4">
         <!-- Section Header - More compact -->
         <div class="text-center mb-12" [@fadeInUp]>
-          <span class="text-blue-400 text-sm font-medium tracking-wider block mb-2">GET IN TOUCH</span>
+          <span class="text-blue-400 text-sm font-medium tracking-wider block mb-2"
+            >GET IN TOUCH</span
+          >
           <h2 class="text-white text-3xl md:text-4xl font-bold mb-4">
             Let's
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
@@ -57,40 +61,53 @@ import {
             class="bg-gradient-to-br p-4 from-gray-900/90 to-blue-950/90 backdrop-blur-sm border border-blue-800/30 rounded-2xl overflow-hidden"
             [@fadeInUp]="{ value: '', params: { delay: '0.1s' } }"
           >
-            <div class="grid md:grid-cols-5 m-4 divide-y md:divide-y-0 md:divide-x divide-blue-800/30">
-              
+            <div
+              class="grid md:grid-cols-5 m-4 divide-y md:divide-y-0 md:divide-x divide-blue-800/30"
+            >
               <!-- Left Side - Contact Info (2 columns) -->
               <div class="md:col-span-2 p-6 md:p-8">
                 <h3 class="text-lg font-semibold text-white mb-4">Contact Information</h3>
-                
+
                 <!-- Quick Contact Items -->
                 <div class="space-y-4 mb-6">
                   <div class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-700/30 flex items-center justify-center group-hover:bg-blue-800/40 group-hover:border-blue-500/50 transition-all duration-300">
+                    <div
+                      class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-700/30 flex items-center justify-center group-hover:bg-blue-800/40 group-hover:border-blue-500/50 transition-all duration-300"
+                    >
                       <i class="fas fa-envelope text-blue-400"></i>
                     </div>
                     <div>
                       <p class="text-xs text-gray-500">Email</p>
-                      <a href="mailto:hello@johndeveloper.com" class="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+                      <a
+                        href="mailto:hello@johndeveloper.com"
+                        class="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+                      >
                         wangageremi725@gmail.com
                       </a>
                     </div>
                   </div>
 
                   <div class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-700/30 flex items-center justify-center group-hover:bg-blue-800/40 group-hover:border-blue-500/50 transition-all duration-300">
+                    <div
+                      class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-700/30 flex items-center justify-center group-hover:bg-blue-800/40 group-hover:border-blue-500/50 transition-all duration-300"
+                    >
                       <i class="fas fa-phone text-blue-400"></i>
                     </div>
                     <div>
                       <p class="text-xs text-gray-500">Phone</p>
-                      <a href="tel:+15551234567" class="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+                      <a
+                        href="tel:+15551234567"
+                        class="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+                      >
                         +254742545572
                       </a>
                     </div>
                   </div>
 
                   <div class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-700/30 flex items-center justify-center group-hover:bg-blue-800/40 group-hover:border-blue-500/50 transition-all duration-300">
+                    <div
+                      class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-700/30 flex items-center justify-center group-hover:bg-blue-800/40 group-hover:border-blue-500/50 transition-all duration-300"
+                    >
                       <i class="fas fa-map-marker-alt text-blue-400"></i>
                     </div>
                     <div>
@@ -110,10 +127,12 @@ import {
                 <div>
                   <p class="text-xs text-gray-500 mb-2">Social</p>
                   <div class="flex space-x-2">
-                    <a *ngFor="let social of socialLinks"
-                       [href]="social.link"
-                       target="_blank"
-                       class="w-8 h-8 rounded-lg bg-blue-900/30 border border-blue-700/30 flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-800/40 hover:border-blue-500/50 transition-all duration-300">
+                    <a
+                      *ngFor="let social of socialLinks"
+                      [href]="social.link"
+                      target="_blank"
+                      class="w-8 h-8 rounded-lg bg-blue-900/30 border border-blue-700/30 flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-800/40 hover:border-blue-500/50 transition-all duration-300"
+                    >
                       <i [class]="social.icon" class="text-sm"></i>
                     </a>
                   </div>
@@ -123,16 +142,20 @@ import {
               <!-- Right Side - Quick Message Form (3 columns) -->
               <div class="md:col-span-3 p-6 md:p-8">
                 <h3 class="text-lg font-semibold text-white mb-4">Send a quick message</h3>
-                
+
                 <!-- Form Status Messages -->
-                <div *ngIf="formStatus === 'success'" 
-                     class="mb-4 p-3 bg-green-900/30 border border-green-700/30 rounded-lg text-sm text-green-300 flex items-center space-x-2">
+                <div
+                  *ngIf="formStatus === 'success'"
+                  class="mb-4 p-3 bg-green-900/30 border border-green-700/30 rounded-lg text-sm text-green-300 flex items-center space-x-2"
+                >
                   <i class="fas fa-check-circle"></i>
                   <span>Message sent successfully!</span>
                 </div>
 
-                <div *ngIf="formStatus === 'error'" 
-                     class="mb-4 p-3 bg-red-900/30 border border-red-700/30 rounded-lg text-sm text-red-300 flex items-center space-x-2">
+                <div
+                  *ngIf="formStatus === 'error'"
+                  class="mb-4 p-3 bg-red-900/30 border border-red-700/30 rounded-lg text-sm text-red-300 flex items-center space-x-2"
+                >
                   <i class="fas fa-exclamation-triangle"></i>
                   <span>Something went wrong. Try again?</span>
                 </div>
@@ -148,7 +171,9 @@ import {
                         placeholder="Your name"
                         class="w-full px-4 py-2.5 bg-gray-900/60 border border-blue-800/30 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
                       />
-                      <div *ngIf="formErrors.name" class="text-xs text-red-400 mt-1">{{ formErrors.name }}</div>
+                      <div *ngIf="formErrors.name" class="text-xs text-red-400 mt-1">
+                        {{ formErrors.name }}
+                      </div>
                     </div>
                     <div>
                       <input
@@ -158,7 +183,9 @@ import {
                         placeholder="Email address"
                         class="w-full px-4 py-2.5 bg-gray-900/60 border border-blue-800/30 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
                       />
-                      <div *ngIf="formErrors.email" class="text-xs text-red-400 mt-1">{{ formErrors.email }}</div>
+                      <div *ngIf="formErrors.email" class="text-xs text-red-400 mt-1">
+                        {{ formErrors.email }}
+                      </div>
                     </div>
                   </div>
 
@@ -171,7 +198,9 @@ import {
                       placeholder="What's this about?"
                       class="w-full px-4 py-2.5 bg-gray-900/60 border border-blue-800/30 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
-                    <div *ngIf="formErrors.subject" class="text-xs text-red-400 mt-1">{{ formErrors.subject }}</div>
+                    <div *ngIf="formErrors.subject" class="text-xs text-red-400 mt-1">
+                      {{ formErrors.subject }}
+                    </div>
                   </div>
 
                   <!-- Message -->
@@ -183,7 +212,9 @@ import {
                       placeholder="Tell me about your project..."
                       class="w-full px-4 py-2.5 bg-gray-900/60 border border-blue-800/30 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none"
                     ></textarea>
-                    <div *ngIf="formErrors.message" class="text-xs text-red-400 mt-1">{{ formErrors.message }}</div>
+                    <div *ngIf="formErrors.message" class="text-xs text-red-400 mt-1">
+                      {{ formErrors.message }}
+                    </div>
                   </div>
 
                   <!-- Submit Button -->
@@ -194,7 +225,10 @@ import {
                   >
                     <span *ngIf="!isSubmitting">Send Message</span>
                     <span *ngIf="isSubmitting">Sending...</span>
-                    <i *ngIf="!isSubmitting" class="fas fa-paper-plane text-sm group-hover:translate-x-1 transition-transform"></i>
+                    <i
+                      *ngIf="!isSubmitting"
+                      class="fas fa-paper-plane text-sm group-hover:translate-x-1 transition-transform"
+                    ></i>
                     <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
                   </button>
                 </form>
@@ -203,7 +237,10 @@ import {
           </div>
 
           <!-- Quick Response Guarantee -->
-          <div class="text-center mt-6 text-sm text-gray-500" [@fadeInUp]="{ value: '', params: { delay: '0.2s' } }">
+          <div
+            class="text-center mt-6 text-sm text-gray-500"
+            [@fadeInUp]="{ value: '', params: { delay: '0.2s' } }"
+          >
             <i class="fas fa-bolt text-blue-400 mr-1"></i>
             <span>Typically replies within 24 hours</span>
           </div>
@@ -211,23 +248,26 @@ import {
       </div>
 
       <!-- Minimal Decoration -->
-      <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+      <div
+        class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"
+      ></div>
     </section>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+    `,
+  ],
   animations: [
     trigger('fadeInUp', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.6s ease-out', 
-          style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ])
-  ]
+        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+    ]),
+  ],
 })
 export class ContactSectionComponent implements OnInit {
   formData = {
@@ -249,7 +289,11 @@ export class ContactSectionComponent implements OnInit {
 
   socialLinks = [
     { name: 'GitHub', link: 'https://github.com/Geremi57', icon: 'fab fa-github' },
-    { name: 'LinkedIn', link: 'https://www.linkedin.com/in/geremi-wanga-g2018wtk/', icon: 'fab fa-linkedin-in' },
+    {
+      name: 'LinkedIn',
+      link: 'https://www.linkedin.com/in/geremi-wanga-g2018wtk/',
+      icon: 'fab fa-linkedin-in',
+    },
     { name: 'Twitter', link: 'https://x.com/GrizzyK89124', icon: 'fab fa-twitter' },
   ];
 
@@ -289,29 +333,62 @@ export class ContactSectionComponent implements OnInit {
     return isValid;
   }
 
+
+
   async submitForm() {
-    if (this.isSubmitting) return;
+  if (this.isSubmitting) return;
 
-    if (!this.validateForm()) {
-      this.formStatus = 'error';
-      return;
-    }
-
-    this.isSubmitting = true;
-    this.formStatus = 'submitting';
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      this.formStatus = 'success';
-      
-      setTimeout(() => {
-        this.formData = { name: '', email: '', subject: '', message: '' };
-        this.formStatus = 'idle';
-      }, 3000);
-    } catch (error) {
-      this.formStatus = 'error';
-    } finally {
-      this.isSubmitting = false;
-    }
+  if (!this.validateForm()) {
+    this.formStatus = 'error';
+    return;
   }
+
+  this.isSubmitting = true;
+  this.formStatus = 'submitting';
+
+  try {
+    const templateParams = {
+      from_name: this.formData.name,
+      from_email: this.formData.email,
+      subject: this.formData.subject,
+      message: this.formData.message,
+      to_email: environment.emailjs.toEmail,
+    };
+
+     const response = await emailjs.send(
+        environment.emailjs.serviceId, // Get from EmailJS
+        environment.emailjs.templateId, // Get from EmailJS
+        templateParams,
+        environment.emailjs.publicKey // Get from EmailJS
+      );
+
+    if (response.status === 200) {
+      // Success - set status and reset form
+      console.log('success')
+      this.formStatus = 'success';
+      this.formData = { name: '', email: '', subject: '', message: '' };
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        console.log('success')
+        this.formStatus = 'success';
+      }, 3000);
+    } else {
+      throw new Error('Email sending failed');
+    }
+  } catch (error) {
+    console.error('Error sending email:', error);
+    this.formStatus = 'error';
+    
+    // Clear error message after 5 seconds
+    setTimeout(() => {
+      if (this.formStatus === 'error') {
+        this.formStatus = 'idle';
+      }
+    }, 5000);
+  } finally {
+    // IMPORTANT: Always set isSubmitting to false when done
+    this.isSubmitting = false;
+  }
+}
 }
