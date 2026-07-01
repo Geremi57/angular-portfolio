@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import emailjs from '@emailjs/browser';
-import { environment } from '../../environments';
+import { environment } from '../../environments/environment';
 import {
   trigger,
   transition,

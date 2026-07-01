@@ -492,10 +492,10 @@ export class ProjectsSectionComponent implements OnInit, OnDestroy {
       imageUrl: 'assets/projects/images/llm/Space-llm.png',
       thumbnailUrl: 'assets/projects/images/llm/Space-llm.png',
       galleryImages: [
-        'assets/projects/images/llm/Space-llm.png',
-        'assets/projects/images/llm/template-llm.png',
-        'assets/projects/images/llm/upload-llm.png',
-        'assets/projects/images/llm/voice-llm.png'
+        'assets/projects/images/llm/space-2.png',
+        'assets/projects/images/llm/space-1.png',
+        'assets/projects/images/llm/space-3.png',
+        'assets/projects/images/llm/template-llm.png'
       ],
       codePreview: [
         'async sendMessage() {',
@@ -509,7 +509,7 @@ export class ProjectsSectionComponent implements OnInit, OnDestroy {
         '  }',
         '}',
       ],
-      liveLink: 'https://github.com/Geremi57/space-llm',
+      liveLink: 'https://space-topaz-tau.vercel.app/',
       githubLink: 'https://github.com/Geremi57/space-llm',
     },
     {
@@ -581,7 +581,43 @@ export class ProjectsSectionComponent implements OnInit, OnDestroy {
       ],
       liveLink: 'https://www.broaderrealtors.co.ke/',
       githubLink: 'https://github.com/Geremi57/broader-real_estate',
-    }
+    },
+   {
+  id: 4,
+  title: 'EcoToken',
+  category: 'Blockchain',
+  year: '2025',
+  description: 'A blockchain-based waste traceability platform that tracks products from manufacturer to recycling facility. Every step is recorded on-chain, creating an immutable trail while incentivising proper waste disposal through ECO token rewards',
+  technologies: ['Solidity', 'Go', 'Gin', 'React', 'TanStack Start', 'ethers.js', 'Polygon', 'go-ethereum', 'Hardhat', 'OpenZeppelin'],
+  tags: ['Blockchain', 'Web3', 'Supply Chain', 'Traceability'],
+  features: [
+    'On-chain product registration with QR code generation',
+    'Full supply chain traceability from manufacturer to recycler',
+    'ECO token rewards for consumers and vendors',
+    'MetaMask wallet authentication and role management',
+    'Smart contract automated token minting',
+  ],
+  imageUrl: 'assets/projects/images/ecotoken/ecotoken.png',
+  thumbnailUrl: 'assets/projects/images/ecotoken/ecotoken.png',
+  galleryImages: [
+    'assets/projects/images/et/eco-token-1.png',
+    'assets/projects/images/et/eco-token-2.png',
+    'assets/projects/images/et/eco-token-3.png',
+    'assets/projects/images/et/eco-token-4.png',
+  ],
+  codePreview: [
+    'function dropOffWithQR(',
+    '  string calldata productId,',
+    '  address consumer,',
+    '  uint256 weightGrams',
+    ') external onlyRole(VENDOR_ROLE) {',
+    '  require(productRegistry.productExists(productId));',
+    '  ecoToken.mint(consumer, tokens);',
+    '}',
+  ],
+  liveLink: 'https://eco-waste-murex.vercel.app',
+  githubLink: 'https://github.com/Geremi57/Eco-waste',
+}
   ];
 
   get currentProject(): Project | undefined {
