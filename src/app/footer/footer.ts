@@ -92,10 +92,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
             </ul>
             
             <!-- Availability Badge -->
-            <div class="mt-3 flex items-center space-x-2">
-              <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-              <span class="text-green-400 text-xs font-medium">Available for work</span>
-            </div>
+            
           </div>
         </div>
 
