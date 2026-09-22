@@ -1,453 +1,828 @@
-// navbar.component.ts
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { trigger, transition, style, animate, keyframes } from '@angular/animations';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <!-- Navigation Bar -->
     <nav
-      class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 via-blue-950 to-black border-b border-blue-800/30 backdrop-blur-md bg-opacity-90"
+      #navigation
+      class="floating-navbar"
+      [class.is-scrolled]="isScrolled"
+      aria-label="Primary navigation"
     >
-      <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between h-16 lg:h-20">
-          <!-- Logo/Brand -->
-          <div class="flex items-center space-x-2">
-            <div
-              class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center"
-            >
-              <span class="font-bold text-white text-xl">GW</span>
-            </div>
-            <span
-              class="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent"
-            >
-              Geremi Wanga
-            </span>
-          </div>
+      <div class="navbar-pill">
 
-          <!-- Desktop Navigation - Hidden on mobile -->
-          <div class="hidden lg:flex items-center space-x-1">
-            <ng-container *ngFor="let item of navItems">
-              <!-- Regular Nav Items -->
-              <div *ngIf="!item.dropdown" class="relative">
-                <a
-                  [routerLink]="item.route"
-                  [fragment]="item.fragment"
-                  routerLinkActive="text-blue-400 bg-blue-900/30"
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  class="px-4 py-2 rounded-lg text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-all duration-300 flex items-center space-x-1 group"
-                >
-                  <span>{{ item.label }}</span>
-                  <span
-                    *ngIf="item.icon"
-                    class="group-hover:rotate-12 transition-transform duration-300"
-                    >→</span
-                  >
-                </a>
-              </div>
-
-              <!-- Dropdown Items -->
-              <div
-                *ngIf="item.dropdown"
-                class="relative"
-                (mouseenter)="openDropdown(item.id)"
-                (mouseleave)="closeDropdown(item.id)"
-              >
-                <button
-                  class="px-4 py-2 rounded-lg text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-all duration-300 flex items-center space-x-1 group"
-                >
-                  <span>{{ item.label }}</span>
-                  <svg
-                    [class]="activeDropdown === item.id ? 'rotate-180' : ''"
-                    class="w-4 h-4 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
-                  </svg>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div
-                  *ngIf="activeDropdown === item.id"
-                  [@dropdownAnimation]
-                  class="absolute top-full left-0 mt-2 w-48 bg-gray-900/95 backdrop-blur-lg border border-blue-800/30 rounded-lg shadow-2xl shadow-blue-900/30 overflow-hidden"
-                >
-                  <div
-                    *ngFor="let dropdownItem of item.dropdown"
-                    class="border-b border-blue-800/10 last:border-b-0"
-                  >
-                    <a
-                      [href]="dropdownItem.href"
-                      class="block px-4 py-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/30 transition-all duration-200 flex items-center space-x-2 group/item"
-                    >
-                      <div
-                        class="w-2 h-2 rounded-full bg-blue-500 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300"
-                      ></div>
-                      <span>{{ dropdownItem.label }}</span>
-                      <svg
-                        class="w-4 h-4 ml-auto opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover/item:translate-x-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 5l7 7-7 7"
-                        ></path>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-
-            <!-- CTA Button -->
-            <a
-  [routerLink]="['/']"
-  fragment="contact"
-  (mouseenter)="buttonHover = true"
-  (mouseleave)="buttonHover = false"
-  class="ml-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 flex items-center space-x-2"
+      <svg
+  class="navbar-spark"
+  viewBox="0 0 900 62"
+  preserveAspectRatio="none"
+  aria-hidden="true"
 >
+  <path
+    id="navbar-spark-route"
+    d="M31 1 H869 A30 30 0 0 1 899 31 A30 30 0 0 1 869 61 H31 A30 30 0 0 1 1 31 A30 30 0 0 1 31 1"
+    pathLength="1000"
+  />
 
-              <span>Contact</span>
-              <svg
-                [@arrowAnimation]="buttonHover"
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                ></path>
-              </svg>
-</a>
-          </div>
+  <circle class="navbar-spark-dot" r="1.5">
+    <animateMotion
+      dur="7s"
+      repeatCount="indefinite"
+    >
+      <mpath href="#navbar-spark-route" />
+    </animateMotion>
+  </circle>
+</svg>
 
-          <!-- Mobile Menu Button -->
-          <button
-            (click)="toggleMobileMenu()"
-            class="lg:hidden p-2 rounded-lg hover:bg-blue-900/30 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-            aria-label="Toggle menu"
-          >
-            <div class="relative w-6 h-6">
-              <span
-                [class]="isMobileMenuOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-1'"
-                class="absolute left-0 w-6 h-0.5 bg-blue-400 transition-all duration-300"
-              ></span>
-              <span
-                [class]="isMobileMenuOpen ? 'opacity-0' : 'opacity-100'"
-                class="absolute top-1/2 -translate-y-1/2 left-0 w-6 h-0.5 bg-blue-400 transition-all duration-300"
-              ></span>
-              <span
-                [class]="isMobileMenuOpen ? 'top-1/2 -translate-y-1/2 -rotate-45' : 'bottom-1'"
-                class="absolute left-0 w-6 h-0.5 bg-blue-400 transition-all duration-300"
-              ></span>
-            </div>
-          </button>
-        </div>
-
-        <!-- Mobile Menu - Hidden by default -->
-        <div
-          *ngIf="isMobileMenuOpen"
-          [@mobileMenuAnimation]
-          class="lg:hidden z-50 border-t border-blue-800/30 mt-2 rounded-lg overflow-visible"
+        <!-- Brand -->
+        <a
+          routerLink="/"
+          fragment="home"
+          class="navbar-brand"
+          aria-label="Geremi Wanga — Home"
+          (click)="closeMobileMenu()"
         >
-          <div class="py-2">
-            <ng-container *ngFor="let item of navItems">
-              <!-- Regular Mobile Items -->
-              <div *ngIf="!item.dropdown" class="border-b border-blue-800/10 last:border-b-0">
-                <a
-                  [routerLink]="item.route"
-                  [fragment]="item.fragment"
-                  (click)="closeMobileMenu()"
-                  routerLinkActive="text-blue-400 bg-blue-900/30"
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  class="block px-4 py-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/30 transition-all duration-200 flex items-center space-x-2 group"
-                >
-                  <span>{{ item.label }}</span>
-                  <svg
-                    class="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5l7 7-7 7"
-                    ></path>
-                  </svg>
-                </a>
-              </div>
+          <span>G</span><i>.</i>
+        </a>
 
-              <!-- Mobile Dropdown Items -->
-              <div *ngIf="item.dropdown" class="border-b border-blue-800/10 last:border-b-0">
-                <button
-                  (click)="toggleMobileDropdown(item.id)"
-                  class="w-full px-4 py-3 text-left text-gray-300 hover:text-blue-400 hover:bg-blue-900/30 transition-all duration-200 flex items-center justify-between"
-                >
-                  <span>{{ item.label }}</span>
-                  <svg
-                    [class]="activeMobileDropdown === item.id ? 'rotate-180' : ''"
-                    class="w-4 h-4 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
-                  </svg>
-                </button>
+        <!-- Desktop Links -->
+        <div class="navbar-links">
 
-                <!-- Mobile Dropdown Content -->
-                <div
-                  *ngIf="activeMobileDropdown === item.id"
-                  class="bg-gray-800/50 border-t border-blue-800/10"
-                >
-                  <div
-                    *ngFor="let dropdownItem of item.dropdown"
-                    class="border-b border-blue-800/5 last:border-b-0"
-                  >
-                    <a
-                      [href]="dropdownItem.href"
-                      (click)="closeMobileMenu()"
-                      class="block pl-8 pr-4 py-3 text-gray-400 hover:text-blue-400 hover:bg-blue-900/30 transition-all duration-200 text-sm flex items-center space-x-2 group"
-                    >
-                      <div
-                        class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      ></div>
-                      <span>{{ dropdownItem.label }}</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
+          <a
+            routerLink="/"
+            fragment="home"
+            class="navbar-link"
+            [class.active]="activeSection === 'home'"
+            (click)="setActiveSection('home')"
+          >
+            Home
+          </a>
 
-            <!-- Mobile CTA Button -->
-            <div class="px-4 py-3 border-t border-blue-800/10">
-              <a
-  [routerLink]="['/']"
-  fragment="contact"
-  (click)="closeMobileMenu()"
-  class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold flex items-center justify-center space-x-2"
->
+          <a
+            routerLink="/"
+            fragment="projects"
+            class="navbar-link"
+            [class.active]="activeSection === 'projects'"
+            (click)="setActiveSection('projects')"
+          >
+            Projects
+          </a>
 
-                <span>Get In Touch</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  ></path>
-                </svg>
-</a>
-            </div>
-          </div>
+          <a
+            routerLink="/"
+            fragment="about"
+            class="navbar-link"
+            [class.active]="activeSection === 'about'"
+            (click)="setActiveSection('about')"
+          >
+            About
+          </a>
+
+          <a
+            routerLink="/blog"
+            class="navbar-link"
+            [class.active]="activeSection === 'blog'"
+            (click)="setActiveSection('blog')"
+          >
+            Blog
+          </a>
+
         </div>
+
+        <!-- Contact -->
+        <a
+          routerLink="/"
+          fragment="contact"
+          class="navbar-contact"
+          (click)="setActiveSection('contact')"
+        >
+          Contact
+
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 17L17 7M17 7H8M17 7V16"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+
+        <!-- Mobile Button -->
+        <button
+          type="button"
+          class="mobile-menu-button"
+          [class.open]="isMobileMenuOpen"
+          [attr.aria-expanded]="isMobileMenuOpen"
+          aria-label="Toggle navigation menu"
+          (click)="toggleMobileMenu()"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
       </div>
 
-      <!-- Background blur for mobile menu -->
-      
-    </nav>
 
-    <!-- Spacer for fixed navbar -->
-    <div class="h-16 lg:h-20"></div>
+      <!-- Mobile Menu -->
+      <div
+        class="mobile-menu"
+        [class.open]="isMobileMenuOpen"
+      >
+        <a
+          routerLink="/"
+          fragment="home"
+          class="mobile-link"
+          [class.active]="activeSection === 'home'"
+          (click)="navigateMobile('home')"
+        >
+          Home
+        </a>
+
+        <a
+          routerLink="/"
+          fragment="projects"
+          class="mobile-link"
+          [class.active]="activeSection === 'projects'"
+          (click)="navigateMobile('projects')"
+        >
+          Projects
+        </a>
+
+        <a
+          routerLink="/"
+          fragment="about"
+          class="mobile-link"
+          [class.active]="activeSection === 'about'"
+          (click)="navigateMobile('about')"
+        >
+          About
+        </a>
+
+        <a
+          routerLink="/blog"
+          class="mobile-link"
+          [class.active]="activeSection === 'blog'"
+          (click)="navigateMobile('blog')"
+        >
+          Blog
+        </a>
+
+        <a
+          routerLink="/"
+          fragment="contact"
+          class="mobile-contact"
+          (click)="navigateMobile('contact')"
+        >
+          Contact
+
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 17L17 7M17 7H8M17 7V16"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
+    </nav>
   `,
-  styles: [
-    `
-      :host {
+
+  styles: [`
+    :host {
+      display: block;
+    }
+
+    /* ================================
+       FLOATING NAVBAR
+    ================================= */
+
+    .floating-navbar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      width: min(900px, calc(100% - 32px));
+
+      z-index: 1000;
+
+      transition: top 250ms ease;
+    }
+
+    .navbar-pill {
+      height: 62px;
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+
+      padding: 6px 7px 6px 12px;
+
+      background: rgba(5, 9, 20, 0.86);
+
+      border: 1px solid rgba(59, 130, 246, 0.16);
+
+      border-radius: 999px;
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.35),
+        0 0 25px rgba(59, 130, 246, 0.04);
+
+      transition:
+        background 250ms ease,
+        border-color 250ms ease,
+        box-shadow 250ms ease;
+    }
+
+    .floating-navbar.is-scrolled .navbar-pill {
+      background: rgba(5, 9, 20, 0.94);
+
+      border-color: rgba(59, 130, 246, 0.24);
+
+      box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(59, 130, 246, 0.07);
+    }
+
+    /* ================================
+       BRAND
+    ================================= */
+
+    .navbar-brand {
+      width: 42px;
+      height: 42px;
+
+      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      color: #f8fafc;
+
+      text-decoration: none;
+
+      font-size: 19px;
+      font-weight: 700;
+
+      letter-spacing: -0.04em;
+
+      transition:
+        background 180ms ease,
+        transform 180ms ease;
+    }
+
+    .navbar-brand span {
+      color: #f8fafc;
+    }
+
+    .navbar-brand i {
+      color: #3b82f6;
+      font-style: normal;
+    }
+
+    .navbar-brand:hover {
+      background: rgba(59, 130, 246, 0.1);
+      transform: scale(1.04);
+    }
+
+    /* ================================
+       LINKS
+    ================================= */
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+
+      gap: 3px;
+
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .navbar-link {
+      position: relative;
+
+      display: flex;
+      align-items: center;
+
+      height: 46px;
+
+      padding: 0 18px;
+
+      border-radius: 999px;
+
+      color: #94a3b8;
+
+      font-size: 14px;
+      font-weight: 500;
+
+      text-decoration: none;
+
+      transition:
+        color 180ms ease,
+        background 180ms ease;
+    }
+
+    .navbar-link:hover {
+      color: #e2e8f0;
+      background: rgba(59, 130, 246, 0.07);
+    }
+
+    .navbar-link.active {
+      color: #f8fafc;
+      background: rgba(59, 130, 246, 0.13);
+    }
+
+    .navbar-link.active::after {
+      content: '';
+
+      position: absolute;
+
+      bottom: 5px;
+      left: 50%;
+
+      width: 3px;
+      height: 3px;
+
+      transform: translateX(-50%);
+
+      border-radius: 50%;
+
+      background: #3b82f6;
+
+      box-shadow:
+        0 0 7px rgba(59, 130, 246, 0.8);
+    }
+
+    /* ================================
+       CONTACT
+    ================================= */
+
+    .navbar-contact {
+      height: 46px;
+
+      display: flex;
+      align-items: center;
+      gap: 7px;
+
+      padding: 0 19px;
+
+      color: white;
+
+      background: #2563eb;
+
+      border-radius: 999px;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      text-decoration: none;
+
+      box-shadow:
+        0 5px 18px rgba(37, 99, 235, 0.2);
+
+      transition:
+        background 180ms ease,
+        transform 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .navbar-contact svg {
+      width: 15px;
+      height: 15px;
+
+      transition: transform 180ms ease;
+    }
+
+    .navbar-contact:hover {
+      background: #3b82f6;
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 7px 22px rgba(37, 99, 235, 0.3);
+    }
+
+    .navbar-contact:hover svg {
+      transform: translate(2px, -2px);
+    }
+
+    /* ================================
+       MOBILE BUTTON
+    ================================= */
+
+    .mobile-menu-button {
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      margin-left: auto;
+
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+
+      gap: 4px;
+
+      border: 0;
+      border-radius: 50%;
+
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    .mobile-menu-button:hover {
+      background: rgba(59, 130, 246, 0.08);
+    }
+
+    .mobile-menu-button span {
+      display: block;
+
+      width: 17px;
+      height: 1.5px;
+
+      border-radius: 999px;
+
+      background: #cbd5e1;
+
+      transition:
+        transform 200ms ease,
+        opacity 200ms ease;
+    }
+
+    .mobile-menu-button.open span:nth-child(1) {
+      transform: translateY(5.5px) rotate(45deg);
+    }
+
+    .mobile-menu-button.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-button.open span:nth-child(3) {
+      transform: translateY(-5.5px) rotate(-45deg);
+    }
+
+    /* ================================
+       MOBILE MENU
+    ================================= */
+
+    .mobile-menu {
+      display: none;
+
+      margin-top: 8px;
+
+      padding: 8px;
+
+      background: rgba(5, 9, 20, 0.94);
+
+      border: 1px solid rgba(59, 130, 246, 0.15);
+
+      border-radius: 20px;
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.45);
+
+      opacity: 0;
+
+      transform: translateY(-6px);
+
+      pointer-events: none;
+
+      transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .mobile-link {
+      display: flex;
+      align-items: center;
+
+      min-height: 46px;
+
+      padding: 0 14px;
+
+      border-radius: 13px;
+
+      color: #94a3b8;
+
+      font-size: 14px;
+      font-weight: 500;
+
+      text-decoration: none;
+    }
+
+    .mobile-link:hover,
+    .mobile-link.active {
+      color: #f8fafc;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .mobile-contact {
+      min-height: 46px;
+
+      margin-top: 5px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      color: white;
+
+      background: #2563eb;
+
+      border-radius: 13px;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      text-decoration: none;
+    }
+
+    .mobile-contact svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================= */
+
+    @media (max-width: 899px) {
+      .floating-navbar {
+        top: 14px;
+        width: calc(100% - 24px);
+      }
+
+      .navbar-pill {
+        height: 54px;
+        padding-left: 8px;
+        padding-right: 7px;
+      }
+
+      .navbar-links,
+      .navbar-contact {
+        display: none;
+      }
+
+      .mobile-menu-button {
+        display: flex;
+      }
+
+      .mobile-menu {
         display: block;
       }
-      ::-webkit-scrollbar {
-        width: 4px;
+    }
+
+    @media (max-width: 420px) {
+      .floating-navbar {
+        width: calc(100% - 20px);
       }
-      ::-webkit-scrollbar-track {
-        background: rgba(30, 41, 59, 0.5);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .floating-navbar,
+      .navbar-pill,
+      .navbar-brand,
+      .navbar-link,
+      .navbar-contact,
+      .navbar-contact svg,
+      .mobile-menu,
+      .mobile-menu-button span {
+        transition: none;
       }
-      ::-webkit-scrollbar-thumb {
-        background: rgba(59, 130, 246, 0.5);
-        border-radius: 2px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(59, 130, 246, 0.8);
-      }
-    `,
-  ],
-  animations: [
-    trigger('dropdownAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-10px) scale(0.95)' }),
-        animate(
-          '200ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ opacity: 1, transform: 'translateY(0) scale(1)' })
-        ),
-      ]),
-      transition(':leave', [
-        animate(
-          '150ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ opacity: 0, transform: 'translateY(-10px) scale(0.95)' })
-        ),
-      ]),
-    ]),
-    trigger('mobileMenuAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, height: 0, transform: 'translateY(-20px)' }),
-        animate(
-          '300ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ opacity: 1, height: '*', transform: 'translateY(0)' })
-        ),
-      ]),
-      transition(':leave', [
-        animate(
-          '250ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ opacity: 0, height: 0, transform: 'translateY(-20px)' })
-        ),
-      ]),
-    ]),
-    trigger('arrowAnimation', [
-      transition('false => true', [
-        animate(
-          '300ms ease-out',
-          keyframes([
-            style({ transform: 'translateX(0)', offset: 0 }),
-            style({ transform: 'translateX(4px)', offset: 0.7 }),
-            style({ transform: 'translateX(0)', offset: 1 }),
-          ])
-        ),
-      ]),
-    ]),
-  ],
+    }
+      .navbar-pill {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.navbar-pill::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 300deg,
+    rgba(255, 255, 255, 0.05) 320deg,
+    rgba(255, 255, 255, 0.9) 345deg,
+    rgba(96, 165, 250, 0.8) 355deg,
+    transparent 360deg
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  animation: borderOrbit 7s linear infinite;
+
+  pointer-events: none;
+  z-index: -1;
+}
+
+.navbar-pill {
+  position: relative;
+  isolation: isolate;
+
+  /* keep your existing styles */
+  height: 62px;
+
+  background: rgba(5, 9, 20, 0.90);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.navbar-spark {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+.navbar-spark-path {
+  fill: none;
+  stroke: transparent;
+}
+
+.navbar-spark-dot {
+  fill: white;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 5px rgba(147, 197, 253, 0.75))
+    drop-shadow(0 0 9px rgba(59, 130, 246, 0.35));
+}
+
+/* Keep your actual navbar content above the spark */
+.navbar-pill > *:not(.navbar-spark) {
+  position: relative;
+  z-index: 3;
+}
+
+@keyframes borderOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+  `],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements AfterViewInit, OnDestroy {
   isMobileMenuOpen = false;
-  activeDropdown: string | null = null;
-  activeMobileDropdown: string | null = null;
-  buttonHover = false;
+  isScrolled = false;
+  activeSection = 'home';
 
-  navItems = [
-  {
-    id: 'home',
-    label: 'Home',
-    route: '/',
-    icon: true,
-    fragment: 'home',
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    route: '/',
-    icon: true,
-    fragment: 'projects',
-  },
-  {
-    id: 'services',
-    label: 'Services',
-    fragment: 'services',
-    dropdown: [
-      { label: 'Web Development', href: '#web-dev' },
-      { label: 'UI/UX Design', href: '#ui-ux' },
-      { label: 'Consulting', href: '#consulting' },
-      { label: 'Training', href: '#training' },
-    ],
-  },
-  {
-    id: 'portfolio',
-    label: 'Portfolio',
-    fragment: 'portfolio',
-    dropdown: [
-      { label: 'Recent Work', href: '#recent' },
-      { label: 'Case Studies', href: '#case-studies' },
-      { label: 'Client Projects', href: '#client' },
-      { label: 'Personal Projects', href: '#personal' },
-    ],
-  },
-  {
-    id: 'blog',
-    label: 'Blog',
-    route: '/blog',        // Change this from '/' to '/blog'
-    icon: true,
-    fragment: '',           // Remove the fragment since it's a separate page
-  },
-  {
-    id: 'about',
-    label: 'About',
-    route: '/',
-    icon: true,
-    fragment: 'about',
-  },
-];
+  private observer?: IntersectionObserver;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    // Close mobile menu when resizing to desktop
-    if (window.innerWidth >= 1024) {
+  constructor(
+    private router: Router,
+    private elementRef: ElementRef<HTMLElement>
+  ) {}
+
+  ngAfterViewInit(): void {
+    this.setupSectionObserver();
+    this.updateScrollState();
+
+    if (this.router.url.startsWith('/blog')) {
+      this.activeSection = 'blog';
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.updateScrollState();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    if (window.innerWidth >= 900) {
       this.closeMobileMenu();
-      this.activeMobileDropdown = null;
     }
   }
 
-  @HostListener('window:click', ['$event'])
-  onWindowClick(event: MouseEvent) {
-    // Close dropdown if clicking outside
-    const target = event.target as HTMLElement;
-    if (window.innerWidth >= 1024 && !target.closest('.relative') && this.activeDropdown) {
-      this.closeDropdown();
+  @HostListener('window:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.closeMobileMenu();
     }
   }
 
-  ngOnInit() {
-    // Add any initialization logic here
-  }
-
-  openDropdown(id: string) {
-    this.activeDropdown = id;
-  }
-
-  closeDropdown(id?: string) {
-    setTimeout(() => {
-      if (id === this.activeDropdown) {
-        this.activeDropdown = null;
-      }
-    }, 150);
-  }
-
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
     if (!this.isMobileMenuOpen) {
-      this.activeMobileDropdown = null;
+      return;
+    }
+
+    const target = event.target as Node;
+
+    if (!this.elementRef.nativeElement.contains(target)) {
+      this.closeMobileMenu();
     }
   }
 
-  closeMobileMenu() {
-    this.isMobileMenuOpen = false;
-    this.activeMobileDropdown = null;
+  private updateScrollState(): void {
+    this.isScrolled = window.scrollY > 24;
   }
 
-  toggleMobileDropdown(id: string) {
-    this.activeMobileDropdown = this.activeMobileDropdown === id ? null : id;
+  private setupSectionObserver(): void {
+    if (typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+
+    const sections = ['home', 'projects', 'about', 'contact']
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              b.intersectionRatio - a.intersectionRatio
+          );
+
+        if (visible.length) {
+          this.activeSection = visible[0].target.id;
+        }
+      },
+      {
+        rootMargin: '-30% 0px -50% 0px',
+        threshold: [0.1, 0.25, 0.5],
+      }
+    );
+
+    sections.forEach((section) => {
+      this.observer?.observe(section);
+    });
+  }
+
+  setActiveSection(section: string): void {
+    this.activeSection = section;
+    this.closeMobileMenu();
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
+  navigateMobile(section: string): void {
+    this.activeSection = section;
+    this.closeMobileMenu();
   }
 }
