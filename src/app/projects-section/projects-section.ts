@@ -1,730 +1,839 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
-  trigger,
-  transition,
-  style,
-  animate,
-} from '@angular/animations';
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
+import {
+  siAngular,
+  siEthereum,
+  siGithub,
+  siGo,
+  siGooglemaps,
+  siHtml5,
+  siJavascript,
+  siNodedotjs,
+  siOpenrouter,
+  siPolygon,
+  siReact,
+  siSolidity,
+  siTailwindcss,
+  siTypescript,
+  type SimpleIcon,
+} from 'simple-icons';
+
+interface ProjectTechnology {
+  name: string;
+  icon: SimpleIcon;
+}
 
 interface Project {
-  id: number;
   title: string;
   category: string;
   year: string;
   description: string;
-  technologies: string[];
+  technologies: ProjectTechnology[];
   tags: string[];
   features: string[];
-  imageUrl: string;
-  thumbnailUrl: string;
-  galleryImages: string[];
-  codePreview: string[];
-  liveLink: string;
-  githubLink: string;
+  image: string;
+  gallery: string[];
+  live: string;
+  github: string;
 }
 
 @Component({
   selector: 'app-projects-section',
   standalone: true,
-  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
       id="projects"
-      class="relative py-16 md:py-32 bg-gradient-to-b from-blue-950 via-black to-gray-900 overflow-hidden"
+      class="projects-section"
+      aria-labelledby="projects-title"
     >
-      <!-- Background Elements (kept same) -->
-      <div class="absolute inset-0">
-        <div
-          class="absolute inset-0 opacity-5"
-          style="background-image: 
-                    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                    linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-                    background-size: 50px 50px;"
-        ></div>
+      <div #track class="projects-scroll-track">
+        <div class="projects-sticky-stage">
+          <header class="projects-header">
+            <div class="section-eyebrow">
+              <span>03</span>
+              <span>/</span>
+              <span>Selected work</span>
+            </div>
+          </header>
 
-        <div
-          *ngFor="let snippet of floatingCode"
-          [style.left]="snippet.x + '%'"
-          [style.top]="snippet.y + '%'"
-          [style.animationDelay]="snippet.delay + 's'"
-          class="absolute text-blue-400/10 font-mono text-sm opacity-30 animate-float"
-        >
-          {{ snippet.code }}
-        </div>
+          <div class="projects-showcase">
+            <div class="project-stack" aria-live="polite">
+              @for (project of projects; track project.title; let i = $index) {
+                <article
+                  #projectCard
+                  class="project-card"
+                  [attr.data-state]="cardStates[i]"
+                  [attr.aria-hidden]="i !== currentIndex"
+                >
+                  <div class="project-image-wrap">
+                    <img
+                      class="project-image"
+                      [src]="project.image"
+                      [alt]="project.title + ' interface'"
+                      [loading]="i === 0 ? 'eager' : 'lazy'"
+                    />
 
-        <div
-          class="absolute -top-20 -right-20 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"
-        ></div>
-        <div
-          class="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"
-          style="animation-delay: 2s"
-        ></div>
-      </div>
+                    <div class="project-image-shade"></div>
 
-      <div class="relative z-10 container mx-auto px-4">
-        <!-- Section Header - Reduced margin on mobile -->
-        <div class="text-center mb-12 md:mb-20" [@fadeInUp]>
-          <div class="inline-flex items-center justify-center space-x-2 mb-4">
-            <div class="w-6 h-px bg-gradient-to-r from-blue-400 to-cyan-400"></div>
-            <span class="text-blue-400 font-medium tracking-wider text-sm md:text-base">PORTFOLIO</span>
-            <div class="w-6 h-px bg-gradient-to-r from-cyan-400 to-blue-400"></div>
-          </div>
-
-          <h2 class="text-white text-2xl md:text-5xl font-bold mb-4 md:mb-6">
-            Featured
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-              Projects</span
-            >
-          </h2>
-
-          <p class="text-gray-400 text-base md:text-xl max-w-3xl mx-auto px-4">
-            A collection of my latest work showcasing expertise in modern web development,
-            innovative design, and problem-solving through technology.
-          </p>
-        </div>
-
-        <!-- Projects Carousel -->
-        <div class="relative max-w-6xl mx-auto">
-          <!-- Navigation Arrows (hidden on mobile) -->
-          <button
-            (click)="prevProject()"
-            class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-12 h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 hover:scale-110 active:scale-95 transition-all duration-300 items-center justify-center z-20 group"
-          >
-            <svg
-              class="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              ></path>
-            </svg>
-          </button>
-
-          <button
-            (click)="nextProject()"
-            class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 w-12 h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 hover:scale-110 active:scale-95 transition-all duration-300 items-center justify-center z-20 group"
-          >
-            <svg
-              class="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              ></path>
-            </svg>
-          </button>
-
-          <!-- Project Cards Container - Taller on mobile -->
-          <div
-            class="relative h-[650px] md:h-[600px] overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-blue-900/20 via-black/40 to-gray-900/30 border border-blue-800/30 backdrop-blur-sm"
-          >
-            <div class="absolute inset-0">
-              <!-- Active Project Display -->
-              <div
-                *ngIf="projects[currentIndex]"
-                [@slideAnimation]="slideDirection"
-                class="absolute inset-0"
-              >
-                <!-- Mobile Layout: Image on top, details below -->
-                <div class="h-full flex flex-col lg:grid lg:grid-cols-2 gap-0">
-                  <!-- Project Image - Smaller on mobile -->
-                  <div
-                    class="relative h-[200px] md:h-[250px] lg:h-full lg:min-h-[400px] overflow-hidden bg-gradient-to-br from-blue-900 to-cyan-900 flex-shrink-0"
-                  >
-                    <!-- Main Image Display -->
-                    <div class="absolute inset-0">
-                      <img 
-                        [src]="getCurrentImage()" 
-                        [alt]="currentProject?.title || 'Project screenshot'"
-                        class="w-full h-full object-cover object-top"
-                        loading="lazy"
-                        (error)="handleImageError($event)"
-                      />
-                    </div>
-                    
-                    <!-- Dark Overlay - Lighter on mobile -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-black/30 lg:from-blue-900/50 lg:to-black/50"></div>
-                    
-                    <!-- Image Navigation Arrows (if multiple images) - Smaller on mobile -->
-                    <div *ngIf="hasMultipleImages()" 
-                         class="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between px-2 lg:px-4 z-30">
-                      <button 
-                        (click)="prevImage(); $event.stopPropagation()"
-                        class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-300 flex items-center justify-center text-sm lg:text-base"
-                        [disabled]="isLoading"
-                      >
-                        ←
-                      </button>
-                      <button 
-                        (click)="nextImage(); $event.stopPropagation()"
-                        class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-300 flex items-center justify-center text-sm lg:text-base"
-                        [disabled]="isLoading"
-                      >
-                        →
-                      </button>
-                    </div>
-                    
-                    <!-- Image Counter - Smaller on mobile -->
-                    <div *ngIf="hasMultipleImages()" 
-                         class="absolute top-2 right-2 lg:top-4 lg:right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full z-30">
-                      {{ currentImageIndex + 1 }} / {{ getGalleryImageCount() }}
-                    </div>
-                    
-                    <!-- Image Thumbnails Dots - Smaller on mobile -->
-                    <div *ngIf="hasMultipleImages()" 
-                         class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1 lg:space-x-2 z-30">
-                      <button 
-                        *ngFor="let image of getGalleryImages(); let i = index; trackBy: trackByIndex"
-                        (click)="currentImageIndex = i; $event.stopPropagation()"
-                        class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full transition-all duration-300"
-                        [class.w-3]="currentImageIndex === i"
-                        [class.lg:w-4]="currentImageIndex === i"
-                        [class.bg-blue-400]="currentImageIndex === i"
-                        [class.bg-white/50]="currentImageIndex !== i"
-                        [class.hover:bg-white/80]="currentImageIndex !== i"
-                      ></button>
-                    </div>
-                    
-                    <!-- Tags Overlay - Hide on mobile, show on desktop -->
-                    <div class="hidden lg:flex absolute top-4 left-4 z-20 flex-wrap gap-2">
-                      <div
-                        *ngFor="let tag of currentProject?.tags || []"
-                        class="px-3 py-1 bg-blue-900/80 backdrop-blur-sm rounded-full text-xs text-blue-300 border border-blue-700/30"
-                      >
-                        {{ tag }}
-                      </div>
+                    <div class="project-number">
+                      {{ formatIndex(i + 1) }}
                     </div>
 
-                    <!-- Loading Spinner -->
-                    <div *ngIf="isLoading" 
-                         class="absolute inset-0 flex items-center justify-center bg-black/50 z-40">
-                      <div class="w-8 h-8 lg:w-10 lg:h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                  </div>
-
-                  <!-- Project Details - Scrollable on mobile with less padding -->
-                  <div
-                    class="flex-1 p-4 md:p-6 lg:p-12 flex flex-col bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm overflow-y-auto"
-                  >
-                    <!-- Tags - Show on mobile here instead of on image -->
-                    <div class="flex flex-wrap gap-1.5 mb-3 lg:hidden">
-                      <div
-                        *ngFor="let tag of currentProject?.tags || []"
-                        class="px-2 py-0.5 bg-blue-900/60 backdrop-blur-sm rounded-full text-xs text-blue-300 border border-blue-700/30"
-                      >
-                        {{ tag }}
-                      </div>
+                    <div class="project-image-label">
+                      {{ project.category }}
                     </div>
 
-                    <!-- Project Header - Smaller text on mobile -->
-                    <div class="mb-4 lg:mb-6">
-                      <div class="flex items-center space-x-2 mb-2 lg:mb-4">
-                        <span
-                          class="px-2 py-0.5 lg:px-3 lg:py-1 bg-blue-900/50 border border-blue-700/30 rounded-full text-xs lg:text-sm text-blue-300"
-                        >
-                          {{ currentProject?.category || 'Project' }}
-                        </span>
-                        <span class="text-gray-400 text-xs lg:text-sm">{{ currentProject?.year || '' }}</span>
-                      </div>
-
-                      <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 lg:mb-4">
-                        {{ currentProject?.title || 'Project Title' }}
-                      </h3>
-
-                      <p class="text-gray-300 text-sm lg:text-base leading-relaxed line-clamp-3 lg:line-clamp-none">
-                        {{ currentProject?.description || 'Project description goes here.' }}
-                      </p>
-                    </div>
-
-                    <!-- Technologies Used - Smaller chips on mobile -->
-                    <div class="mb-4 lg:mb-8">
-                      <h4 class="text-base lg:text-lg font-semibold text-blue-300 mb-2 lg:mb-3">Technologies</h4>
-                      <div class="flex flex-wrap gap-1.5 lg:gap-2">
-                        <div
-                          *ngFor="let tech of currentProject?.technologies || []"
-                          class="px-2 py-1 lg:px-3 lg:py-1.5 bg-blue-900/40 border border-blue-700/20 rounded-lg text-xs lg:text-sm text-blue-300 hover:bg-blue-800/40 hover:border-blue-500/30 transition-colors duration-300"
-                        >
-                          {{ tech }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Action Buttons - Stack on mobile -->
-                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-auto pt-4 lg:pt-6">
+                    <div class="project-links">
                       <a
-                        *ngIf="currentProject?.liveLink"
-                        [href]="currentProject?.liveLink"
+                        class="project-link"
+                        [href]="project.github"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="px-4 py-2.5 lg:px-6 lg:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-sm lg:text-base hover:from-blue-500 hover:to-cyan-400 transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 group"
+                        [attr.aria-label]="'View ' + project.title + ' source on GitHub'"
+                        (click)="$event.stopPropagation()"
                       >
-                        <span>Live Preview</span>
                         <svg
-                          class="w-4 h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300"
-                          fill="none"
-                          stroke="currentColor"
                           viewBox="0 0 24 24"
+                          role="img"
+                          aria-label="GitHub"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          ></path>
+                            [attr.d]="githubIcon.path"
+                            fill="currentColor"
+                          />
                         </svg>
                       </a>
 
                       <a
-                        *ngIf="currentProject?.githubLink"
-                        [href]="currentProject?.githubLink"
+                        class="project-link"
+                        [href]="project.live"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="px-4 py-2.5 lg:px-6 lg:py-3 border-2 border-blue-400/30 rounded-lg font-semibold text-sm lg:text-base hover:border-blue-400/50 hover:bg-blue-900/30 transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 group"
+                        [attr.aria-label]="'Open live ' + project.title"
+                        (click)="$event.stopPropagation()"
                       >
-                        <span class="text-cyan-500">View Code</span>
-                        <i class="fa-brands fa-github text-cyan-400"></i>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42L17.59 5H14V3ZM5 5h5v14h14v-2H7V5H5Z"
+                            fill="currentColor"
+                          />
+                        </svg>
                       </a>
                     </div>
                   </div>
-                </div>
+
+                  <div class="project-card-content">
+                    <div class="project-card-meta">
+                      <span>{{ project.category }}</span>
+                      <span>{{ project.year }}</span>
+                    </div>
+
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+
+                    <div class="project-card-footer">
+                      <div
+                        class="project-technologies"
+                        [attr.aria-label]="project.title + ' technologies'"
+                      >
+                        @for (
+                          technology of project.technologies.slice(0, 5);
+                          track technology.name
+                        ) {
+                          <span
+                            class="technology-badge"
+                            [attr.title]="technology.name"
+                            [attr.aria-label]="technology.name"
+                          >
+                            <span class="technology-icon">
+                              <svg
+                                viewBox="0 0 24 24"
+                                role="img"
+                                [attr.aria-label]="technology.name"
+                              >
+                                <path
+                                  [attr.d]="technology.icon.path"
+                                  fill="currentColor"
+                                />
+                              </svg>
+                            </span>
+                          </span>
+                        }
+                      </div>
+
+                      <a
+                        class="view-project"
+                        [href]="project.live"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <span>View project</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42L17.59 5H14V3ZM5 5h5v14h14v-2H7V5H5Z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+
+            <aside class="project-info">
+              <div class="project-info-intro">
+                <span class="info-label">Projects</span>
+
+                <h2 id="projects-title">
+                  Projects built<br />
+                  to be used.
+                </h2>
+
+                <p>
+                  A collection of applications built across web, AI,
+                  real estate, education, and emerging technology.
+                </p>
               </div>
-            </div>
 
-            <!-- Project Indicators (Dots) - Moved up a bit on mobile -->
-            <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
-              <button
-                *ngFor="let project of projects; let i = index; trackBy: trackByIndex"
-                (click)="goToProject(i)"
-                [class]="
-                  currentIndex === i
-                    ? 'w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 ring-4 ring-blue-400/20'
-                    : 'w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-gray-600 hover:bg-gray-500 transition-colors duration-300'
-                "
-              >
-                <span class="sr-only">Go to project {{ i + 1 }}</span>
-              </button>
-            </div>
+              @if (activeProject; as project) {
+                <div class="project-active-info">
+                  <div class="active-project-index">
+                    <span>{{ formatIndex(currentIndex + 1) }}</span>
+                    <span class="index-line"></span>
+                    <span>{{ formatIndex(projects.length) }}</span>
+                  </div>
+
+                  <div class="active-project-category">
+                    {{ project.category }}
+                  </div>
+
+                  <h3>{{ project.title }}</h3>
+                  <p>{{ project.description }}</p>
+
+                  <div class="active-project-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span>{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </aside>
           </div>
 
-          <!-- Mobile Navigation - Improved spacing -->
-          <div class="flex justify-center space-x-6 mt-12 lg:hidden">
+          <div class="projects-controls" aria-label="Project controls">
             <button
-              (click)="prevProject()"
-              class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
+              type="button"
+              class="project-control"
+              [disabled]="currentIndex === 0"
+              (click)="scrollToProject(currentIndex - 1)"
             >
-              <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                ></path>
+                  d="m14.7 5.3-1.4-1.4L5.2 12l8.1 8.1 1.4-1.4L9 13h10v-2H9l5.7-5.7Z"
+                  fill="currentColor"
+                />
               </svg>
+              <span>Previous</span>
             </button>
 
-            <div class="flex items-center space-x-1">
-              <span class="text-blue-400 font-bold text-sm lg:text-base">{{ currentIndex + 1 }}</span>
-              <span class="text-gray-400 text-sm lg:text-base">/</span>
-              <span class="text-gray-400 text-sm lg:text-base">{{ projects.length }}</span>
+            <div class="project-progress">
+              <strong>{{ formatIndex(currentIndex + 1) }}</strong>
+              <span class="progress-slash">/</span>
+              <span>{{ formatIndex(projects.length) }}</span>
             </div>
 
             <button
-              (click)="nextProject()"
-              class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-blue-900/80 backdrop-blur-sm border border-blue-700/30 text-blue-300 hover:text-white hover:bg-blue-800/80 hover:border-blue-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
+              type="button"
+              class="project-control"
+              [disabled]="currentIndex === projects.length - 1"
+              (click)="scrollToProject(currentIndex + 1)"
             >
-              <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span>Next</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                ></path>
+                  d="m9.3 18.7 1.4 1.4 8.1-8.1-8.1-8.1-1.4 1.4L15 11H5v2h10l-5.7 5.7Z"
+                  fill="currentColor"
+                />
               </svg>
             </button>
-          </div>
-        </div>
-
-        <!-- View All Projects CTA - Smaller on mobile -->
-        <div class="text-center mt-16 lg:mt-20" [@fadeInUp]="{ value: '', params: { delay: '0.3s' } }">
-          <div class="inline-flex items-center space-x-2 lg:space-x-4">
-            <div class="w-12 lg:w-24 h-px bg-gradient-to-r from-blue-600/30 to-cyan-600/30"></div>
-            <button
-              class="px-6 py-3 lg:px-8 lg:py-4 border-2 border-blue-400/30 rounded-lg lg:rounded-xl font-semibold text-sm lg:text-base hover:border-blue-400/50 hover:bg-blue-900/30 transform hover:scale-105 transition-all duration-300 group"
-            >
-              <span class="text-blue-300 group-hover:text-white">View All Projects</span>
-              <svg
-                class="w-4 h-4 lg:w-5 lg:h-5 inline-block ml-1 lg:ml-2 group-hover:translate-x-1 transition-transform duration-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                ></path>
-              </svg>
-            </button>
-            <div class="w-12 lg:w-24 h-px bg-gradient-to-l from-blue-600/30 to-cyan-600/30"></div>
           </div>
         </div>
       </div>
     </section>
   `,
-  styles: [
-    `
-      :host {
-        display: block;
-      }
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0) rotate(0deg);
-        }
-        33% {
-          transform: translateY(-15px) rotate(2deg);
-        }
-        66% {
-          transform: translateY(8px) rotate(-2deg);
-        }
-      }
-      .animate-float {
-        animation: float 20s ease-in-out infinite;
-      }
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
-      /* Add line-clamp utility */
-      .line-clamp-3 {
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-      }
-    `,
-  ],
-  animations: [
-    trigger('slideAnimation', [
-      transition(':increment', [
-        style({ transform: 'translateX(100%)', opacity: 0 }),
-        animate(
-          '600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ transform: 'translateX(0)', opacity: 1 })
-        ),
-      ]),
-      transition(':decrement', [
-        style({ transform: 'translateX(-100%)', opacity: 0 }),
-        animate(
-          '600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ transform: 'translateX(0)', opacity: 1 })
-        ),
-      ]),
-    ]),
-    trigger('fadeInUp', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(30px)' }),
-        animate(
-          '0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ opacity: 1, transform: 'translateY(0)' })
-        ),
-      ]),
-    ]),
-    trigger('scaleIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.8)' }),
-        animate(
-          '0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          style({ opacity: 1, transform: 'scale(1)' })
-        ),
-      ]),
-    ]),
-  ],
+  styleUrl: './projects-section.css',
 })
-export class ProjectsSectionComponent implements OnInit, OnDestroy {
+export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
+  @ViewChildren('projectCard')
+  private readonly projectCards!: QueryList<ElementRef<HTMLElement>>;
+
+  private trackElement?: HTMLElement;
+  private scrollFrame: number | null = null;
+  private animationFrame: number | null = null;
+  private animationTimer: number | null = null;
+  private resizeObserver?: ResizeObserver;
+  private isAnimating = false;
+  private renderedIndex = 0;
+
   currentIndex = 0;
-  currentImageIndex = 0;
-  slideDirection: 'increment' | 'decrement' = 'increment';
-  autoSlideInterval: any;
-  isPaused = false;
-  isLoading = false;
 
-  floatingCode = [
-    { x: 5, y: 10, delay: 0, code: '<div class="container">' },
-    { x: 85, y: 15, delay: 3, code: 'const project = {};' },
-    { x: 15, y: 85, delay: 6, code: 'ng serve --open' },
-    { x: 75, y: 80, delay: 2, code: 'npm run build' },
-    { x: 45, y: 25, delay: 4, code: 'export class Project {' },
-    { x: 55, y: 65, delay: 5, code: 'import { Component }' },
-  ];
+  cardStates: Array<'active' | 'stacked' | 'passed'> = [];
 
-  projects: Project[] = [
+  readonly githubIcon = siGithub;
+
+  readonly projects: Project[] = [
     {
-      id: 1,
       title: 'Space LLM Support AI Chat Assistant',
       category: 'AI Application',
       year: '2024',
-      description: 'An intelligent AI chat assistant built with Angular and integrated with OpenRouter API. Features include voice input, template-based conversations, and file upload capabilities.',
-      technologies: ['Golang', 'Angular 17', 'OpenRouter API', 'TypeScript', 'Tailwind CSS', 'Web Speech API'],
+      description:
+        'A voice-enabled AI workspace for responsive conversations, templates, and file analysis.',
+      technologies: [
+        { name: 'Go', icon: siGo },
+        { name: 'Angular', icon: siAngular },
+        { name: 'OpenRouter', icon: siOpenrouter },
+        { name: 'TypeScript', icon: siTypescript },
+        { name: 'Tailwind CSS', icon: siTailwindcss },
+      ],
       tags: ['AI', 'Chat', 'Voice'],
       features: [
         'Real-time AI responses',
-        'Voice input support',
+        'Voice input',
         'Conversation templates',
         'File upload & analysis',
-        'Markdown rendering'
+        'Markdown rendering',
       ],
-      imageUrl: 'assets/projects/images/llm/Space-llm.png',
-      thumbnailUrl: 'assets/projects/images/llm/Space-llm.png',
-      galleryImages: [
+      image: 'assets/projects/images/llm/Space-llm.png',
+      gallery: [
         'assets/projects/images/llm/space-2.png',
         'assets/projects/images/llm/space-1.png',
         'assets/projects/images/llm/space-3.png',
-        'assets/projects/images/llm/template-llm.png'
+        'assets/projects/images/llm/template-llm.png',
       ],
-      codePreview: [
-        'async sendMessage() {',
-        '  this.isLoading = true;',
-        '  try {',
-        '    const response = await this.openRouterService',
-        '      .chat(this.messages);',
-        '    this.addResponse(response);',
-        '  } finally {',
-        '    this.isLoading = false;',
-        '  }',
-        '}',
-      ],
-      liveLink: 'https://space-topaz-tau.vercel.app/',
-      githubLink: 'https://github.com/Geremi57/space-llm',
+      live: 'https://space-topaz-tau.vercel.app/',
+      github: 'https://github.com/Geremi57/space-llm',
     },
     {
-      id: 2,
       title: 'PurpleHeyz Education Platform',
       category: 'Social Application',
       year: '2024',
-      description: 'A modern Learning application for QA learning with FlashCards and progression tracking',
-      technologies: ['React', 'Golang', 'Node.Js', 'Render Web Service', 'TailwindCss'],
+      description:
+        'An interactive learning community built around focused study cards and progress tracking.',
+      technologies: [
+        { name: 'React', icon: siReact },
+        { name: 'Go', icon: siGo },
+        { name: 'Node.js', icon: siNodedotjs },
+        { name: 'Tailwind CSS', icon: siTailwindcss },
+      ],
       tags: ['Education', 'Community', 'Tracking'],
       features: [
         'User profiles',
         'Interactive cards',
         'Real-time updates',
         'Engagement analytics',
-        'Responsive design'
+        'Responsive design',
       ],
-      imageUrl: 'assets/projects/images/ph/purpleHeyz.png',
-      thumbnailUrl: 'assets/projects/images/ph/purpleHeyz.png',
-      galleryImages: [
+      image: 'assets/projects/images/ph/purpleHeyz.png',
+      gallery: [
         'assets/projects/images/ph/purpleHeyz.png',
         'assets/projects/images/ph/details-card.png',
-        'assets/projects/images/ph/answer-ph.png'
+        'assets/projects/images/ph/answer-ph.png',
       ],
-      codePreview: [
-        '@Component({',
-        '  selector: \'app-profile-card\',',
-        '  template: `...`',
-        '})',
-        'export class ProfileCardComponent {',
-        '  @Input() user: User;',
-        '  @Output() interact = new EventEmitter();',
-        '}',
-      ],
-      liveLink: 'https://purple-heyz.netlify.app/',
-      githubLink: 'https://github.com/Geremi57/FlashNotes',
+      live: 'https://purple-heyz.netlify.app/',
+      github: 'https://github.com/Geremi57/FlashNotes',
     },
     {
-      id: 3,
       title: 'Real Estate Platform',
       category: 'Real Estate',
-      year: '2023-2024',
-      description: 'A comprehensive real estate platform for property listings, with advanced filtering, property details, and interactive sliders for property search.',
-      technologies: ['Golang', 'Google Maps API', 'Render web service', 'Resend Email API', 'JavaScript'],
+      year: '2023–2024',
+      description:
+        'A property discovery experience with precise filters, interactive maps, and detailed listings.',
+      technologies: [
+        { name: 'Go', icon: siGo },
+        { name: 'Google Maps', icon: siGooglemaps },
+        { name: 'JavaScript', icon: siJavascript },
+        { name: 'HTML5', icon: siHtml5 },
+      ],
       tags: ['Real Estate', 'Maps', 'Filters'],
       features: [
         'Property listings',
         'Advanced filters',
         'Interactive maps',
         'Price sliders',
-        'Property details view'
+        'Property details view',
       ],
-      imageUrl: 'assets/projects/images/ra/Real-Estate.png',
-      thumbnailUrl: 'assets/projects/images/ra/Real-Estate.png',
-      galleryImages: [
+      image: 'assets/projects/images/ra/Real-Estate.png',
+      gallery: [
         'assets/projects/images/ra/Real-Estate.png',
         'assets/projects/images/ra/apartments.png',
         'assets/projects/images/ra/details-ra.png',
-        'assets/projects/images/ra/sliders-ra.png'
+        'assets/projects/images/ra/sliders-ra.png',
       ],
-      codePreview: [
-        'interface Property {',
-        '  id: string;',
-        '  title: string;',
-        '  price: number;',
-        '  location: GeoPoint;',
-        '  features: string[];',
-        '}',
-      ],
-      liveLink: 'https://www.broaderrealtors.co.ke/',
-      githubLink: 'https://github.com/Geremi57/broader-real_estate',
+      live: 'https://www.broaderrealtors.co.ke/',
+      github: 'https://github.com/Geremi57/broader_real_estate',
     },
-   {
-  id: 4,
-  title: 'EcoToken',
-  category: 'Blockchain',
-  year: '2025',
-  description: 'A blockchain-based waste traceability platform that tracks products from manufacturer to recycling facility. Every step is recorded on-chain, creating an immutable trail while incentivising proper waste disposal through ECO token rewards',
-  technologies: ['Solidity', 'Go', 'Gin', 'React', 'TanStack Start', 'ethers.js', 'Polygon', 'go-ethereum', 'Hardhat', 'OpenZeppelin'],
-  tags: ['Blockchain', 'Web3', 'Supply Chain', 'Traceability'],
-  features: [
-    'On-chain product registration with QR code generation',
-    'Full supply chain traceability from manufacturer to recycler',
-    'ECO token rewards for consumers and vendors',
-    'MetaMask wallet authentication and role management',
-    'Smart contract automated token minting',
-  ],
-  imageUrl: 'assets/projects/images/ecotoken/ecotoken.png',
-  thumbnailUrl: 'assets/projects/images/ecotoken/ecotoken.png',
-  galleryImages: [
-    'assets/projects/images/et/eco-token-1.png',
-    'assets/projects/images/et/eco-token-2.png',
-    'assets/projects/images/et/eco-token-3.png',
-    'assets/projects/images/et/eco-token-4.png',
-  ],
-  codePreview: [
-    'function dropOffWithQR(',
-    '  string calldata productId,',
-    '  address consumer,',
-    '  uint256 weightGrams',
-    ') external onlyRole(VENDOR_ROLE) {',
-    '  require(productRegistry.productExists(productId));',
-    '  ecoToken.mint(consumer, tokens);',
-    '}',
-  ],
-  liveLink: 'https://eco-waste-murex.vercel.app',
-  githubLink: 'https://github.com/Geremi57/Eco-waste',
-}
+    {
+      title: 'EcoToken',
+      category: 'Blockchain',
+      year: '2025',
+      description:
+        'On-chain material traceability with token rewards across the complete supply chain.',
+      technologies: [
+        { name: 'Solidity', icon: siSolidity },
+        { name: 'Go', icon: siGo },
+        { name: 'React', icon: siReact },
+        { name: 'Ethereum', icon: siEthereum },
+        { name: 'Polygon', icon: siPolygon },
+      ],
+      tags: ['Blockchain', 'Web3', 'Supply Chain', 'Traceability'],
+      features: [
+        'On-chain product registration with QR code generation',
+        'Full supply chain traceability',
+        'ECO token rewards',
+        'MetaMask wallet authentication',
+        'Smart contract automated token minting',
+      ],
+      image: 'assets/projects/images/ecotoken/ecotoken.png',
+      gallery: [
+        'assets/projects/images/ecotoken/eco-token-1.png',
+        'assets/projects/images/ecotoken/eco-token-2.png',
+        'assets/projects/images/ecotoken/eco-token-3.png',
+        'assets/projects/images/ecotoken/eco-token-4.png',
+      ],
+      live: 'https://eco-waste-murex.vercel.app',
+      github: 'https://github.com/Geremi57/Eco-waste',
+    },
   ];
 
-  get currentProject(): Project | undefined {
+  constructor(
+    private readonly host: ElementRef<HTMLElement>,
+    private readonly zone: NgZone,
+  ) {
+    this.cardStates = this.projects.map((_, index) =>
+      index === 0 ? 'active' : 'stacked',
+    );
+  }
+
+  get activeProject(): Project | undefined {
     return this.projects[this.currentIndex];
   }
 
-  ngOnInit() {
-    this.startAutoSlide();
+  ngAfterViewInit(): void {
+    this.trackElement =
+      this.host.nativeElement.querySelector<HTMLElement>(
+        '.projects-scroll-track',
+      ) ?? undefined;
+
+    if (!this.trackElement) {
+      return;
+    }
+
+    this.applyStaticCardState(0);
+
+    this.zone.runOutsideAngular(() => {
+      window.addEventListener('scroll', this.onScroll, {
+        passive: true,
+      });
+      window.addEventListener('resize', this.onResize, {
+        passive: true,
+      });
+    });
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.requestScrollUpdate();
+    });
+
+    this.resizeObserver.observe(this.trackElement);
+    this.requestScrollUpdate();
   }
 
-  ngOnDestroy() {
-    this.stopAutoSlide();
+  ngOnDestroy(): void {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onResize);
+
+    if (this.scrollFrame !== null) {
+      cancelAnimationFrame(this.scrollFrame);
+    }
+
+    if (this.animationFrame !== null) {
+      cancelAnimationFrame(this.animationFrame);
+    }
+
+    if (this.animationTimer !== null) {
+      window.clearTimeout(this.animationTimer);
+    }
+
+    this.resizeObserver?.disconnect();
   }
 
-  startAutoSlide() {
-    this.autoSlideInterval = setInterval(() => {
-      if (!this.isPaused) {
-        this.nextProject();
+  formatIndex(value: number): string {
+    return value.toString().padStart(2, '0');
+  }
+
+  scrollToProject(index: number): void {
+    const track = this.trackElement;
+    if (!track) {
+      return;
+    }
+
+    const safeIndex = Math.min(
+      this.projects.length - 1,
+      Math.max(0, index),
+    );
+
+    const trackTop =
+      track.getBoundingClientRect().top + window.scrollY;
+
+    const distance = Math.max(
+      track.offsetHeight - window.innerHeight,
+      1,
+    );
+
+    const targetProgress =
+      safeIndex / Math.max(this.projects.length - 1, 1);
+
+    window.scrollTo({
+      top: trackTop + distance * targetProgress,
+      behavior: window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches
+        ? 'auto'
+        : 'smooth',
+    });
+  }
+
+  private readonly onScroll = (): void => {
+    this.requestScrollUpdate();
+  };
+
+  private readonly onResize = (): void => {
+    this.requestScrollUpdate();
+  };
+
+  private requestScrollUpdate(): void {
+    if (this.scrollFrame !== null) {
+      return;
+    }
+
+    this.scrollFrame = requestAnimationFrame(() => {
+      this.scrollFrame = null;
+      this.updateFromScroll();
+    });
+  }
+
+  private updateFromScroll(): void {
+    const track = this.trackElement;
+    if (!track) {
+      return;
+    }
+
+    const trackTop =
+      track.getBoundingClientRect().top + window.scrollY;
+
+    const distance = Math.max(
+      track.offsetHeight - window.innerHeight,
+      1,
+    );
+
+    const progress = Math.min(
+      1,
+      Math.max(
+        0,
+        (window.scrollY - trackTop) / distance,
+      ),
+    );
+
+    const totalSteps = Math.max(
+      this.projects.length - 1,
+      1,
+    );
+
+    const timeline = progress * totalSteps;
+
+    const nextIndex = Math.min(
+      this.projects.length - 1,
+      Math.max(0, Math.round(timeline)),
+    );
+
+    if (nextIndex === this.renderedIndex) {
+      return;
+    }
+
+    const jump = Math.abs(
+      nextIndex - this.renderedIndex,
+    );
+
+    const previousIndex = this.renderedIndex;
+    this.renderedIndex = nextIndex;
+
+    this.zone.run(() => {
+      this.currentIndex = nextIndex;
+      this.cardStates = this.projects.map((_, index) =>
+        index === nextIndex
+          ? 'active'
+          : index < nextIndex
+            ? 'passed'
+            : 'stacked',
+      );
+    });
+
+    /*
+     * If the user scrolls hard enough to cross multiple project
+     * checkpoints in one movement, do NOT animate through the
+     * intermediate cards. Jump directly to the destination.
+     *
+     * This is the key to avoiding the translucent/midpoint state.
+     */
+    if (jump > 1) {
+      this.stopAnimation();
+      this.applyStaticCardState(nextIndex);
+      return;
+    }
+
+    if (
+      window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches
+    ) {
+      this.stopAnimation();
+      this.applyStaticCardState(nextIndex);
+      return;
+    }
+
+    this.animateAdjacentCard(
+      previousIndex,
+      nextIndex,
+    );
+  }
+
+  private animateAdjacentCard(
+    fromIndex: number,
+    toIndex: number,
+  ): void {
+    this.stopAnimation();
+
+    const cards =
+      this.projectCards?.toArray() ?? [];
+
+    const outgoing =
+      cards[fromIndex]?.nativeElement;
+    const incoming =
+      cards[toIndex]?.nativeElement;
+
+    if (!outgoing || !incoming) {
+      this.applyStaticCardState(toIndex);
+      return;
+    }
+
+    const forward = toIndex > fromIndex;
+
+    /*
+     * The cards are always fully opaque.
+     *
+     * The outgoing card leaves first. Only after it is completely
+     * out of the way does the incoming card move to the front.
+     * So there is no transparent card-over-card composition.
+     */
+    this.isAnimating = true;
+
+    outgoing.style.opacity = '1';
+    outgoing.style.zIndex = '80';
+    outgoing.style.pointerEvents = 'none';
+
+    incoming.style.opacity = '1';
+    incoming.style.zIndex = '70';
+    incoming.style.pointerEvents = 'none';
+
+    const start = performance.now();
+    const duration = 360;
+
+    const animate = (now: number): void => {
+      const raw = Math.min(
+        1,
+        (now - start) / duration,
+      );
+
+      const eased = this.easeInOut(raw);
+
+      if (raw < 0.58) {
+        /* Phase 1 — remove the old card completely. */
+        const phase = eased / this.easeInOut(0.58);
+
+        outgoing.style.transform = forward
+          ? `translate3d(${-120 * phase}px, ${-165 * phase}px, 0) rotateX(${-7 * phase}deg) rotateZ(${-6 * phase}deg) scale(${1 - 0.045 * phase})`
+          : `translate3d(${120 * phase}px, ${-165 * phase}px, 0) rotateX(${-7 * phase}deg) rotateZ(${6 * phase}deg) scale(${1 - 0.045 * phase})`;
+
+        outgoing.style.opacity = '1';
+
+        incoming.style.transform =
+  'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
+
+        incoming.style.opacity = '0';
+      } else {
+        /* Phase 2 — bring the new card in, still fully opaque. */
+        outgoing.style.transform = forward
+          ? 'translate3d(-120px, -165px, 0) rotateX(-7deg) rotateZ(-6deg) scale(.955)'
+          : 'translate3d(120px, -165px, 0) rotateX(-7deg) rotateZ(6deg) scale(.955)';
+        outgoing.style.opacity = '1';
+
+        const phase =
+          (eased - this.easeInOut(0.58)) /
+          (1 - this.easeInOut(0.58));
+
+      //   incoming.style.transform =
+      //     this.interpolateStackToFront(
+      //       toIndex,
+      //       Math.min(1, Math.max(0, phase)),
+      //     );
+      //   incoming.style.opacity = '1';
+      // }
+
+      outgoing.style.opacity = '0';
+
+incoming.style.transform =
+  'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
+
+incoming.style.opacity = '1';
+incoming.style.zIndex = '80';
       }
-    }, 5000);
+
+      if (raw < 1) {
+        this.animationFrame = requestAnimationFrame(
+          animate,
+        );
+        return;
+      }
+
+      this.animationFrame = null;
+      this.isAnimating = false;
+      this.applyStaticCardState(toIndex);
+    };
+
+    this.animationFrame = requestAnimationFrame(animate);
+
+    this.animationTimer = window.setTimeout(() => {
+      if (!this.isAnimating) {
+        return;
+      }
+
+      this.stopAnimation();
+      this.applyStaticCardState(toIndex);
+    }, duration + 80);
   }
 
-  stopAutoSlide() {
-    if (this.autoSlideInterval) {
-      clearInterval(this.autoSlideInterval);
+  private stackTransform(
+    index: number,
+    depth: number,
+  ): string {
+    const safeDepth = Math.min(3, Math.max(1, depth));
+    const direction = index % 2 === 0 ? -1 : 1;
+
+    return (
+      `translate3d(${safeDepth * 10}px, ${safeDepth * 15}px, 0) ` +
+      `rotateX(${-safeDepth * 1.2}deg) ` +
+      `rotateZ(${direction * safeDepth * 1.15}deg) ` +
+      `scale(${1 - safeDepth * 0.035})`
+    );
+  }
+
+  // private interpolateStackToFront(
+  //   index: number,
+  //   progress: number,
+  // ): string {
+  //   const p = Math.min(1, Math.max(0, progress));
+  //   const eased = this.easeInOut(p);
+  //   const direction = index % 2 === 0 ? -1 : 1;
+
+  //   const x = 10 * (1 - eased);
+  //   const y = 15 * (1 - eased);
+  //   const rotateX = -1.2 * (1 - eased);
+  //   const rotateZ = direction * 1.15 * (1 - eased);
+  //   const scale = 0.965 + 0.035 * eased;
+
+  //   return (
+  //     `translate3d(${x}px, ${y}px, 0) ` +
+  //     `rotateX(${rotateX}deg) ` +
+  //     `rotateZ(${rotateZ}deg) ` +
+  //     `scale(${scale})`
+  //   );
+  // }
+
+  private applyStaticCardState(
+    activeIndex: number,
+  ): void {
+    const cards =
+      this.projectCards?.toArray() ?? [];
+
+    cards.forEach((cardRef, index) => {
+      const card = cardRef.nativeElement;
+
+      if (index < activeIndex) {
+        card.style.transform =
+          'translate3d(-120px, -165px, 0) rotateX(-7deg) rotateZ(-6deg) scale(.955)';
+        card.style.opacity = '0';
+        card.style.zIndex = String(10 - index);
+        card.style.pointerEvents = 'none';
+        card.dataset['state'] = 'passed';
+        return;
+      }
+
+      if (index === activeIndex) {
+        card.style.transform =
+          'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
+        card.style.opacity = '1';
+        card.style.zIndex = '80';
+        card.style.pointerEvents = 'auto';
+        card.dataset['state'] = 'active';
+        return;
+      }
+
+      const depth = Math.min(
+        index - activeIndex,
+        3,
+      );
+
+      card.style.transform = this.stackTransform(
+        index,
+        depth,
+      );
+      card.style.opacity = '1';
+      card.style.zIndex = String(60 - index);
+      card.style.pointerEvents = 'none';
+      card.dataset['state'] = 'stacked';
+    });
+  }
+
+  private stopAnimation(): void {
+    if (this.animationFrame !== null) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
     }
-  }
 
-  nextProject() {
-    this.slideDirection = 'increment';
-    this.currentIndex = (this.currentIndex + 1) % this.projects.length;
-    this.resetImageIndex();
-  }
-
-  prevProject() {
-    this.slideDirection = 'decrement';
-    this.currentIndex = (this.currentIndex - 1 + this.projects.length) % this.projects.length;
-    this.resetImageIndex();
-  }
-
-  goToProject(index: number) {
-    this.slideDirection = index > this.currentIndex ? 'increment' : 'decrement';
-    this.currentIndex = index;
-    this.resetImageIndex();
-  }
-
-  resetImageIndex() {
-    this.currentImageIndex = 0;
-  }
-
-  nextImage() {
-    const galleryCount = this.getGalleryImageCount();
-    if (galleryCount > 1) {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.currentImageIndex = (this.currentImageIndex + 1) % galleryCount;
-        this.isLoading = false;
-      }, 300);
+    if (this.animationTimer !== null) {
+      window.clearTimeout(this.animationTimer);
+      this.animationTimer = null;
     }
+
+    this.isAnimating = false;
   }
 
-  prevImage() {
-    const galleryCount = this.getGalleryImageCount();
-    if (galleryCount > 1) {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.currentImageIndex = (this.currentImageIndex - 1 + galleryCount) % galleryCount;
-        this.isLoading = false;
-      }, 300);
-    }
-  }
+  private easeInOut(value: number): number {
+    const clamped = Math.min(
+      1,
+      Math.max(0, value),
+    );
 
-  hasMultipleImages(): boolean {
-    return this.getGalleryImageCount() > 1;
-  }
-
-  getGalleryImageCount(): number {
-    return this.currentProject?.galleryImages?.length || 0;
-  }
-
-  getGalleryImages(): string[] {
-    return this.currentProject?.galleryImages || [];
-  }
-
-  getCurrentImage(): string {
-    if (this.currentProject?.galleryImages?.length) {
-      return this.currentProject.galleryImages[this.currentImageIndex];
-    }
-    return this.currentProject?.imageUrl || 'assets/projects/images/fallback.png';
-  }
-
-  handleImageError(event: any) {
-    console.error('Image failed to load:', event.target.src);
-    event.target.src = 'assets/projects/images/fallback.png';
-  }
-
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    this.isPaused = true;
-  }
-
-  @HostListener('mouseleave')
-  onMouseLeave() {
-    this.isPaused = false;
+    return clamped * clamped * (3 - 2 * clamped);
   }
 }
