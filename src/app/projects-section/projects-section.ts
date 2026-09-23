@@ -19,8 +19,10 @@ import {
   siPolygon,
   siReact,
   siSolidity,
+  siRedis,
   siTailwindcss,
   siTypescript,
+  siPostgresql,
   type SimpleIcon,
 } from 'simple-icons';
 
@@ -279,191 +281,251 @@ export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
   private readonly cardRefs!: QueryList<ElementRef<HTMLElement>>;
 
   readonly projects: Project[] = [
-     {
-      title: 'MotiZ East Africa',
-      category: 'Automotive',
-      year: '2026',
-      description:
-        'A voice-enabled AI workspace for responsive conversations, templates, and file analysis.',
-      technologies: [
-        { name: 'Go', icon: siGo }, 
-        { name: 'Angular', icon: siAngular }, 
-        { name: 'OpenRouter', icon: siOpenrouter },
-        { name: 'TypeScript', icon: siTypescript },
-        { name: 'Tailwind CSS', icon: siTailwindcss },
-      ],
+  {
+    title: 'MotiZ East Africa',
+    category: 'Automotive',
+    year: '2026',
+    description:
+      'A community-driven automotive platform connecting vehicle owners with mechanics through profiles, posts, media sharing, and service-focused interactions.',
+    technologies: [
+      { name: 'Go', icon: siGo },
+      { name: 'React', icon: siReact },
+      { name: 'TypeScript', icon: siTypescript },
+      { name: 'Tailwind CSS', icon: siTailwindcss },
+    ],
+    tags: ['Automotive', 'Community', 'Social'],
+    image: 'motiz.png',
 
-      tags: ['AI', 'Chat', 'Voice'],
-      image: 'motiz.png',
+    gallery: [
+      'assets/projects/images/llm/space-2.png',
+      'assets/projects/images/llm/space-1.png',
+      'assets/projects/images/llm/space-3.png',
+      'assets/projects/images/llm/template-llm.png',
+    ],
 
-      gallery: [
-        'assets/projects/images/llm/space-2.png',
-        'assets/projects/images/llm/space-1.png',
-        'assets/projects/images/llm/space-3.png',
-        'assets/projects/images/llm/template-llm.png',
-      ],
-      features: [
-        'Real-time AI responses',
-        'Voice input',
-        'Conversation templates',
-        'File upload & analysis',
-        'Markdown rendering',
-      ],
-      live: 'https://space-topaz-tau.vercel.app/',
-      github: 'https://github.com/Geremi57/space-llm',
-    },
-    {
-      title: 'Space LLM Support AI Chat Assistant',
-      category: 'AI Application',
-      year: '2024',
-      description:
-        'A voice-enabled AI workspace for responsive conversations, templates, and file analysis.',
-      technologies: [
-        { name: 'Go', icon: siGo },
-        { name: 'Angular', icon: siAngular },
-        { name: 'OpenRouter', icon: siOpenrouter },
-        { name: 'TypeScript', icon: siTypescript },
-        { name: 'Tailwind CSS', icon: siTailwindcss },
-      ],
-      tags: ['AI', 'Chat', 'Voice'],
-      image: 'space-3.png',
-      gallery: [
-        'assets/projects/images/llm/space-2.png',
-        'assets/projects/images/llm/space-1.png',
-        'assets/projects/images/llm/space-3.png',
-        'assets/projects/images/llm/template-llm.png',
-      ],
-      features: [
-        'Real-time AI responses',
-        'Voice input',
-        'Conversation templates',
-        'File upload & analysis',
-        'Markdown rendering',
-      ],
-      live: 'https://space-topaz-tau.vercel.app/',
-      github: 'https://github.com/Geremi57/space-llm',
-    },
-    {
-      title: 'PurpleHeyz Education Platform',
-      category: 'Social Application',
-      year: '2024',
-      description:
-        'An interactive learning community built around focused study cards and progress tracking.',
-      technologies: [
-        { name: 'React', icon: siReact },
-        { name: 'Go', icon: siGo },
-        { name: 'Node.js', icon: siNodedotjs },
-        { name: 'Tailwind CSS', icon: siTailwindcss },
-      ],
-      tags: ['Education', 'Community', 'Tracking'],
-      image: 'assets/projects/images/ph/purpleHeyz.png',
-      gallery: [
-        'assets/projects/images/ph/purpleHeyz.png',
-        'assets/projects/images/ph/details-card.png',
-        'assets/projects/images/ph/answer-ph.png',
-      ],
-      features: [
-        'User profiles',
-        'Interactive cards',
-        'Real-time updates',
-        'Engagement analytics',
-        'Responsive design',
-      ],
-      live: 'https://purple-heyz.netlify.app/',
-      github: 'https://github.com/Geremi57/FlashNotes',
-    },
+    features: [
+      'User profiles and role-based access',
+      'Automotive community posts',
+      'Image and video sharing',
+      'Likes and comments',
+      'Mechanic and customer interactions',
+    ],
 
-     {
-      title: 'SatGate Economic Proof of intent',
-      category: 'Cyber security',
-      year: '2024',
-      description:
-        'An interactive learning community built around focused study cards and progress tracking.',
-      technologies: [
-        { name: 'React', icon: siReact },
-        { name: 'Go', icon: siGo },
-        { name: 'Node.js', icon: siNodedotjs },
-        { name: 'Tailwind CSS', icon: siTailwindcss },
-      ],
-      tags: ['Education', 'Community', 'Tracking'],
-      image: 'satgate.png',
-      gallery: [
-        'assets/projects/images/ph/purpleHeyz.png',
-        'assets/projects/images/ph/details-card.png',
-        'assets/projects/images/ph/answer-ph.png',
-      ],
-      features: [
-        'User profiles',
-        'Interactive cards',
-        'Real-time updates',
-        'Engagement analytics',
-        'Responsive design',
-      ],
-      live: 'https://purple-heyz.netlify.app/',
-      github: 'https://github.com/Geremi57/FlashNotes',
-    },
-    {
-      title: 'Real Estate Platform',
-      category: 'Real Estate',
-      year: '2023–2024',
-      description:
-        'A property discovery experience with precise filters, interactive maps, and detailed listings.',
-      technologies: [ 
-        { name: 'Go', icon: siGo },
-        { name: 'Google Maps', icon: siGooglemaps },
-        { name: 'JavaScript', icon: siJavascript },
-        { name: 'HTML5', icon: siHtml5 },
-      ],
-      tags: ['Real Estate', 'Maps', 'Filters'],
-      image: 'assets/projects/images/ra/Real-Estate.png',
-      gallery: [
-        'assets/projects/images/ra/Real-Estate.png',
-        'assets/projects/images/ra/apartments.png',
-        'assets/projects/images/ra/details-ra.png',
-        'assets/projects/images/ra/sliders-ra.png',
-      ],
-      features: [
-        'Property listings',
-        'Advanced filters',
-        'Interactive maps',
-        'Price sliders',
-        'Property details view',
-      ],
-      live: 'https://www.broaderrealtors.co.ke/',
-      github: 'https://github.com/Geremi57/broader_real_estate',
-    },
-    {
-      title: 'EcoToken',
-      category: 'Blockchain',
-      year: '2025',
-      description:
-        'On-chain material traceability with token rewards across the complete supply chain.',
-      technologies: [
-        { name: 'Solidity', icon: siSolidity },
-        { name: 'Go', icon: siGo },
-        { name: 'React', icon: siReact },
-        { name: 'Ethereum', icon: siEthereum },
-        { name: 'Polygon', icon: siPolygon },
-      ],
-      tags: ['Blockchain', 'Web3', 'Supply Chain', 'Traceability'],
-      image: 'eco-token-1.png',
-      gallery: [
-        'assets/projects/images/ecotoken/eco-token-1.png',
-        'assets/projects/images/ecotoken/eco-token-2.png',
-        'assets/projects/images/ecotoken/eco-token-3.png',
-        'assets/projects/images/ecotoken/eco-token-4.png',
-      ],
-      features: [
-        'On-chain product registration with QR code generation',
-        'Full supply chain traceability',
-        'ECO token rewards',
-        'MetaMask wallet authentication',
-        'Smart contract automated token minting',
-      ],
-      live: 'https://eco-waste-murex.vercel.app',
-      github: 'https://github.com/Geremi57/Eco-waste',
-    },
-  ];
+    live: 'https://motiz-east-africa.vercel.app/',
+    github: 'https://github.com/Geremi57/motiz-east-africa',
+  },
+
+  {
+    title: 'Space LLM Support AI Chat Assistant',
+    category: 'AI Application',
+    year: '2024',
+    description:
+      'An AI-powered support assistant that uses large language models to provide conversational help through a responsive web interface.',
+    technologies: [
+      { name: 'Go', icon: siGo },
+      { name: 'Angular', icon: siAngular },
+      { name: 'OpenRouter', icon: siOpenrouter },
+      { name: 'TypeScript', icon: siTypescript },
+      { name: 'Tailwind CSS', icon: siTailwindcss },
+    ],
+    tags: ['AI', 'Chat', 'LLM'],
+    image: 'space-3.png',
+
+    gallery: [
+      'assets/projects/images/llm/space-2.png',
+      'assets/projects/images/llm/space-1.png',
+      'assets/projects/images/llm/space-3.png',
+      'assets/projects/images/llm/template-llm.png',
+    ],
+
+    features: [
+      'AI-powered conversations',
+      'OpenRouter model integration',
+      'Context-aware chat',
+      'Responsive chat interface',
+      'Markdown response rendering',
+    ],
+
+    live: 'https://space-topaz-tau.vercel.app/',
+    github: 'https://github.com/Geremi57/space-llm',
+  },
+
+  {
+    title: 'FlashNotes',
+    category: 'Education',
+    year: '2024',
+    description:
+      'An interactive study platform designed to help learners create, review, and organize study cards while tracking their learning progress.',
+    technologies: [
+      { name: 'React', icon: siReact },
+      { name: 'Go', icon: siGo },
+      { name: 'OpenRouter', icon: siOpenrouter },
+      { name: 'Tailwind CSS', icon: siTailwindcss },
+    ],
+
+    tags: ['Education', 'Study', 'AI'],
+    image: 'assets/projects/images/ph/purpleHeyz.png',
+
+    gallery: [
+      'assets/projects/images/ph/purpleHeyz.png',
+      'assets/projects/images/ph/details-card.png',
+      'assets/projects/images/ph/answer-ph.png',
+    ],
+
+    features: [
+      'Interactive study cards',
+      'Card creation and organization',
+      'AI-assisted learning',
+      'Answer and review flow',
+      'Responsive study interface',
+    ],
+
+    live: 'https://purple-heyz.netlify.app/',
+    github: 'https://github.com/Geremi57/FlashNotes',
+  },
+
+  {
+    title: 'SatGate Economic Proof of Intent',
+    category: 'Cybersecurity',
+    year: '2024',
+    description:
+      'A cybersecurity-focused proof-of-intent system exploring economic mechanisms for discouraging abusive or malicious interactions with digital services.',
+    technologies: [
+      { name: 'Go', icon: siGo },
+      { name: 'React', icon: siReact },
+      { name: 'TypeScript', icon: siTypescript },
+      { name: 'Tailwind CSS', icon: siTailwindcss },
+    ],
+
+    tags: ['Cybersecurity', 'Proof of Intent', 'Web3'],
+    image: 'satgate.png',
+
+    gallery: [
+      'assets/projects/images/ph/purpleHeyz.png',
+      'assets/projects/images/ph/details-card.png',
+      'assets/projects/images/ph/answer-ph.png',
+    ],
+
+    features: [
+      'Economic proof-of-intent mechanism',
+      'Request validation',
+      'Abuse mitigation',
+      'Interactive security interface',
+      'Web-based system visualization',
+    ],
+
+    live: 'https://purple-heyz.netlify.app/',
+    github: 'https://github.com/Geremi57/FlashNotes',
+  },
+
+  {
+    title: 'Real Estate Platform',
+    category: 'Real Estate',
+    year: '2023–2024',
+    description:
+      'A commercial real-estate platform for discovering properties, exploring listings, and connecting potential clients with available properties.',
+    technologies: [
+      { name: 'Go', icon: siGo },
+      { name: 'Google Maps', icon: siGooglemaps },
+      { name: 'JavaScript', icon: siJavascript },
+      { name: 'HTML5', icon: siHtml5 },
+    ],
+
+    tags: ['Real Estate', 'Maps', 'Listings'],
+    image: 'assets/projects/images/ra/Real-Estate.png',
+
+    gallery: [
+      'assets/projects/images/ra/Real-Estate.png',
+      'assets/projects/images/ra/apartments.png',
+      'assets/projects/images/ra/details-ra.png',
+      'assets/projects/images/ra/sliders-ra.png',
+    ],
+
+    features: [
+      'Property listings',
+      'Property search and filtering',
+      'Interactive maps',
+      'Property details',
+      'Client inquiry handling',
+    ],
+
+    live: 'https://www.broaderrealtors.co.ke/',
+    github: 'https://github.com/Geremi57/broader_real_estate',
+  },
+
+  {
+    title: 'Klimatt',
+    category: 'Agriculture',
+    year: '2026',
+    description:
+      'An offline-first agricultural platform that helps communities monitor food prices and make better-informed decisions using localized market data.',
+    technologies: [
+      { name: 'Go', icon: siGo },
+      { name: 'React', icon: siReact },
+      { name: 'TypeScript', icon: siTypescript },
+      { name: 'PostgreSQL', icon: siPostgresql },
+      { name: 'Redis', icon: siRedis },
+    ],
+
+    tags: ['Agriculture', 'Offline-First', 'Food Prices'],
+    image: 'klimatt.png',
+
+    gallery: [
+      'assets/projects/images/llm/space-2.png',
+      'assets/projects/images/llm/space-1.png',
+      'assets/projects/images/llm/space-3.png',
+      'assets/projects/images/llm/template-llm.png',
+    ],
+
+    features: [
+      'Offline-first functionality',
+      'Food price monitoring',
+      'Localized market data',
+      'Data synchronization',
+      'Progressive web application',
+    ],
+
+    live: 'https://klimatt.onrender.com',
+    github: 'https://github.com/Geremi57/klimatt',
+  },
+
+  {
+    title: 'EcoToken',
+    category: 'Blockchain',
+    year: '2025',
+    description:
+      'A blockchain-based e-waste traceability platform that records materials across the supply chain and rewards sustainable participation with tokenized incentives.',
+    technologies: [
+      { name: 'Solidity', icon: siSolidity },
+      { name: 'Go', icon: siGo },
+      { name: 'React', icon: siReact },
+      { name: 'Ethereum', icon: siEthereum },
+      { name: 'Polygon', icon: siPolygon },
+    ],
+
+    tags: ['Blockchain', 'Web3', 'E-Waste', 'Traceability'],
+    image: 'eco-token-1.png',
+
+    gallery: [
+      'assets/projects/images/ecotoken/eco-token-1.png',
+      'assets/projects/images/ecotoken/eco-token-2.png',
+      'assets/projects/images/ecotoken/eco-token-3.png',
+      'assets/projects/images/ecotoken/eco-token-4.png',
+    ],
+
+    features: [
+      'On-chain product registration',
+      'QR-based product tracking',
+      'Supply chain traceability',
+      'ECO token rewards',
+      'Automated smart contract transactions',
+    ],
+
+    live: 'https://eco-waste-murex.vercel.app',
+    github: 'https://github.com/Geremi57/Eco-waste',
+  },
+];
+
 
 formatIndex(value: number): string {
   return String(value).padStart(2, '0');
