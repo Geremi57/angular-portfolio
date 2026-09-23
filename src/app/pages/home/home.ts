@@ -30,10 +30,6 @@ import { ContactSectionComponent } from '../../contact-section/contact-section';
         <app-projects-section></app-projects-section>
       </section>
 
-      <section id="services" class="scroll-mt-20">
-        <app-services-section></app-services-section>
-      </section>
-
       <section id="contact" class="scroll-mt-20">
         <app-contact-section></app-contact-section>
       </section>
