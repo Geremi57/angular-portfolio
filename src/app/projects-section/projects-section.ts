@@ -279,6 +279,39 @@ export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
   private readonly cardRefs!: QueryList<ElementRef<HTMLElement>>;
 
   readonly projects: Project[] = [
+     {
+      title: 'MotiZ East Africa',
+      category: 'Automotive',
+      year: '2026',
+      description:
+        'A voice-enabled AI workspace for responsive conversations, templates, and file analysis.',
+      technologies: [
+        { name: 'Go', icon: siGo }, 
+        { name: 'Angular', icon: siAngular }, 
+        { name: 'OpenRouter', icon: siOpenrouter },
+        { name: 'TypeScript', icon: siTypescript },
+        { name: 'Tailwind CSS', icon: siTailwindcss },
+      ],
+
+      tags: ['AI', 'Chat', 'Voice'],
+      image: 'motiz.png',
+
+      gallery: [
+        'assets/projects/images/llm/space-2.png',
+        'assets/projects/images/llm/space-1.png',
+        'assets/projects/images/llm/space-3.png',
+        'assets/projects/images/llm/template-llm.png',
+      ],
+      features: [
+        'Real-time AI responses',
+        'Voice input',
+        'Conversation templates',
+        'File upload & analysis',
+        'Markdown rendering',
+      ],
+      live: 'https://space-topaz-tau.vercel.app/',
+      github: 'https://github.com/Geremi57/space-llm',
+    },
     {
       title: 'Space LLM Support AI Chat Assistant',
       category: 'AI Application',
@@ -293,7 +326,7 @@ export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
         { name: 'Tailwind CSS', icon: siTailwindcss },
       ],
       tags: ['AI', 'Chat', 'Voice'],
-      image: 'assets/projects/images/llm/Space-llm.png',
+      image: 'space-3.png',
       gallery: [
         'assets/projects/images/llm/space-2.png',
         'assets/projects/images/llm/space-1.png',
@@ -339,13 +372,43 @@ export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
       live: 'https://purple-heyz.netlify.app/',
       github: 'https://github.com/Geremi57/FlashNotes',
     },
+
+     {
+      title: 'SatGate Economic Proof of intent',
+      category: 'Cyber security',
+      year: '2024',
+      description:
+        'An interactive learning community built around focused study cards and progress tracking.',
+      technologies: [
+        { name: 'React', icon: siReact },
+        { name: 'Go', icon: siGo },
+        { name: 'Node.js', icon: siNodedotjs },
+        { name: 'Tailwind CSS', icon: siTailwindcss },
+      ],
+      tags: ['Education', 'Community', 'Tracking'],
+      image: 'satgate.png',
+      gallery: [
+        'assets/projects/images/ph/purpleHeyz.png',
+        'assets/projects/images/ph/details-card.png',
+        'assets/projects/images/ph/answer-ph.png',
+      ],
+      features: [
+        'User profiles',
+        'Interactive cards',
+        'Real-time updates',
+        'Engagement analytics',
+        'Responsive design',
+      ],
+      live: 'https://purple-heyz.netlify.app/',
+      github: 'https://github.com/Geremi57/FlashNotes',
+    },
     {
       title: 'Real Estate Platform',
       category: 'Real Estate',
       year: '2023–2024',
       description:
         'A property discovery experience with precise filters, interactive maps, and detailed listings.',
-      technologies: [
+      technologies: [ 
         { name: 'Go', icon: siGo },
         { name: 'Google Maps', icon: siGooglemaps },
         { name: 'JavaScript', icon: siJavascript },
@@ -383,7 +446,7 @@ export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
         { name: 'Polygon', icon: siPolygon },
       ],
       tags: ['Blockchain', 'Web3', 'Supply Chain', 'Traceability'],
-      image: 'assets/projects/images/ecotoken/ecotoken.png',
+      image: 'eco-token-1.png',
       gallery: [
         'assets/projects/images/ecotoken/eco-token-1.png',
         'assets/projects/images/ecotoken/eco-token-2.png',
