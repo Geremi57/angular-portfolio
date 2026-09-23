@@ -414,7 +414,7 @@ export class ProjectsSectionComponent implements AfterViewInit, OnDestroy {
       'Web-based system visualization',
     ],
 
-    live: 'https://purple-heyz.netlify.app/',
+    live: 'https://satgate-2.onrender.com/',
     github: 'https://github.com/Geremi57/FlashNotes',
   },
 
